@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
+    "baseUrl": "./",
     "paths": {
-      "@amityco/react-native-cli-chat-ui-kit": ["./src/index"]
+      "@amityco/react-native-cli-chat-ui-kit": ["./src/index"],
+      "~/*": ["./src/*"],
+      "react": ["./node_modules/@types/react"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["esnext"],
     "module": "esnext",
@@ -15,14 +16,14 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
-    "noStrictGenericChecks": false,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "target": "esnext",
-    "verbatimModuleSyntax": true
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true
   }
 }

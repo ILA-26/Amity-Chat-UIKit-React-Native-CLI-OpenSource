@@ -5,7 +5,7 @@ import type { MyMD3Theme } from "../../providers/amity-ui-kit-provider";
 export const useStyles = () => {
 
   const theme = useTheme() as MyMD3Theme;
-  
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -25,7 +25,7 @@ export const useStyles = () => {
     },
     headerTextContainer: {
       flex: 1,
-      flexDirection:'row',
+      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -90,7 +90,7 @@ export const useStyles = () => {
       alignItems: 'center',
       paddingHorizontal: 10,
     },
-    input: { flex: 1, marginHorizontal: 6 },
+    input: { flex: 1, marginHorizontal: 6, padding: 10 },
     cancelBtn: {
       marginRight: 16,
     },
@@ -98,13 +98,13 @@ export const useStyles = () => {
       paddingBottom: 110,
       marginTop: 10,
     },
-    doneText:{
+    doneText: {
       color: theme.colors.primary
     },
-    disabledDone:{
+    disabledDone: {
       opacity: 0.5
     }
   });
-  
+
   return styles;
 }
