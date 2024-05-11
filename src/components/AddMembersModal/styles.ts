@@ -58,11 +58,10 @@ export const useStyles = () => {
     inputWrap: {
       marginHorizontal: 16,
       backgroundColor: theme.colors.secondary,
+      padding: 10,
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 10,
       marginVertical: 10,
     },
     input: { flex: 1, marginHorizontal: 6 },
@@ -79,6 +78,10 @@ export const useStyles = () => {
     disabledDone: {
       opacity: 0.5
     },
+    sectionItem: {
+     flex: 1
+    }
+
   });
   return styles;
 }
