@@ -47,7 +47,6 @@ const LoadingImage = ({
         source,
         (percent: number) => {
           setProgress(percent);
-          console.log('percent:', percent)
         },
         true
 
