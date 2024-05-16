@@ -176,6 +176,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
 
           if ((item?.data as Record<string, any>)?.fileId) {
             const { userObject } = await getUserInfo(item.creatorId);
+
             return {
               _id: item.messageId,
               text: '',
@@ -186,12 +187,14 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
               editedAt: item.updatedAt as string,
               user: {
                 _id: userObject.data.userId ?? '',
-                name: userObject.data.displayName ?? '',
-                avatar: userObject.data.avatar.fileUrl,
+                name: userObject?.data?.displayName ?? '',
+                avatar: userObject?.data?.avatar?.fileUrl ?? '',
               },
               messageType: item.dataType,
               isDeleted: item.isDeleted as boolean
             };
+
+
           } else {
             const { userObject } = await getUserInfo(item.creatorId);
 
@@ -203,12 +206,15 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
               editedAt: item.updatedAt as string,
               user: {
                 _id: userObject.data.userId ?? '',
-                name: userObject.data.displayName ?? '',
-                avatar: userObject.data.avatar.fileUrl,
+                name: userObject?.data?.displayName ?? '',
+                avatar: userObject?.data?.avatar?.fileUrl ?? '',
               },
               messageType: item.dataType,
               isDeleted: item.isDeleted as boolean
             };
+
+
+
           }
         })
       );
@@ -217,6 +223,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
   };
 
   useEffect(() => {
+
     chatFormatter();
   }, [messagesArr]);
 
