@@ -16,12 +16,16 @@ export async function createAmityChannel(
       return reject(new Error('Insufficient member count'));
     }
 
-    let channelType: Amity.ChannelType =
-      users.length > 1 ? 'community' : 'conversation';
+    let channelType: Amity.ChannelType = users.length > 1 ? 'community' : 'conversation';
     let userIds: string[] = [currentUserID];
     const { userObject } = await getAmityUser(currentUserID);
     let displayName = userObject.data.displayName! + ', ';
     displayName += users.map((user) => user.displayName).join(', ');
+
+    if (displayName.length > 100) {
+      displayName = displayName.substring(0, 97) + '...';
+    }
+
     userIds.push(...users.map((user) => user.userId));
     const param = {
       displayName: displayName,
@@ -29,12 +33,12 @@ export async function createAmityChannel(
       userIds: userIds,
     };
 
-
-    const { data: channel  } = await ChannelRepository.createChannel(param);
-    if(channel){
-      resolve(channel as any)
-    }else{
-      reject(' Create Channel unsuccessful')
+    const { data: channel } = await ChannelRepository.createChannel(param);
+    console.log('param: ', param);
+    if (channel) {
+      resolve(channel as any);
+    } else {
+      reject('Create Channel unsuccessful');
     }
   });
 }
@@ -61,7 +65,7 @@ export async function updateAmityChannel(
   channelID: string,
   fileId: string,
   displayName: string | undefined
-): Promise<Amity.Channel | undefined> {
+): Promise<Amity.InternalChannel<any>> {
   let option = {};
 
 

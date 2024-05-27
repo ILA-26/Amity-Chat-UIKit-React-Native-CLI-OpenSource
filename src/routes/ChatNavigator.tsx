@@ -66,6 +66,7 @@ export default function ChatNavigator() {
           component={EditChatRoomDetail}
           options={{
             title: 'Edit Chat Detail',
+            headerShown: false
           }}
         />
 

@@ -49,7 +49,7 @@ export const EditChatRoomDetail: React.FC<EditChatDetailProps> = ({
   const { channelId, groupChat } = route.params;
 
   const [displayName, setDisplayName] = useState<string | undefined>(groupChat?.displayName);
-  const [characterCount, setCharacterCount] = useState(0);
+  const [characterCount, setCharacterCount] = useState(groupChat?.displayName?.length ?? 0);
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const [imageMultipleUri, setImageMultipleUri] = useState<string[]>([]);
   const [uploadedFileId, setUploadedFileId] = useState<string>()
@@ -154,7 +154,7 @@ export const EditChatRoomDetail: React.FC<EditChatDetailProps> = ({
         <View style={styles.topBar}>
           <BackButton />
           <View style={styles.headerTextContainer}>
-            <Text style={styles.headerText}>Member Detail</Text>
+            <Text style={styles.headerText}>Edit Chat Detail</Text>
           </View>
           <DoneButton navigation={navigation} onDonePressed={onDonePressed} />
         </View>
