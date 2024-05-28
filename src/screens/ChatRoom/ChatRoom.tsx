@@ -58,6 +58,9 @@ import { AlbumIcon } from '../../svg/AlbumIcon';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import { getAmityUser } from '../../providers/user-provider';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { IGroupChatObject } from '~/components/ChatList';
 
 type ChatRoomScreenComponentType = React.FC<{
   route: RouteProp<RootStackParamList, 'ChatRoom'>;
@@ -90,10 +93,13 @@ export interface IDisplayImage {
 }
 const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
 
+
+  const { channelList } = useSelector((state: RootState) => state.recentChat);
+
   const styles = useStyles();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  const { chatReceiver, groupChat, channelId } = route.params;
+  let { chatReceiver, groupChat, channelId } = route.params;
 
   const { client, apiRegion } = useAuth();
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -106,6 +112,8 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     onNextPage,
     hasNextPage,
   } = messagesData ?? {};
+
+  const [groupChatInfo, setGroupChatInfo] = useState<IGroupChatObject>({ ...groupChat })
 
   const [inputMessage, setInputMessage] = useState('');
   const [sortedMessages, setSortedMessages] = useState<IMessage[]>([]);
@@ -124,6 +132,11 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
   const subscribeSubChannel = (subChannel: Amity.SubChannel) =>
     disposers.push(subscribeTopic(getSubChannelTopic(subChannel)));
 
+  useEffect(() => {
+    const currentChannel = channelList.find(item => item.chatId === channelId)
+    setGroupChatInfo({displayName: currentChannel?.chatName, avatarFileId: currentChannel?.avatarFileId, memberCount: currentChannel?.chatMemberNumber})
+  }, [channelList])
+
 
   useEffect(() => {
     if (channelId) {
@@ -140,12 +153,13 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     }
   }, [channelId]);
 
+
   const startRead = async () => {
-    await SubChannelRepository.startReading(channelId);
+    await SubChannelRepository.startMessageReceiptSync(channelId);
 
   };
   const stopRead = async () => {
-    await SubChannelRepository.stopReading(channelId);
+    await SubChannelRepository.stopMessageReceiptSync(channelId);
 
   };
 
@@ -154,12 +168,21 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     return user
   }
 
+
   useEffect(() => {
     if (subChannelData && channelId) {
       startRead()
+
       const unsubscribe = MessageRepository.getMessages(
         { subChannelId: channelId, limit: 10, includeDeleted: true },
         (value) => {
+          const messages = value.data;
+
+          // mark the last message as read
+          if (messages.length > 0) {
+            const lastMessage = messages[0];
+            lastMessage.markRead();
+          }
           setMessagesData(value);
           subscribeSubChannel(subChannelData as Amity.SubChannel);
 
@@ -168,6 +191,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       disposers.push(() => unsubscribe);
     }
   }, [subChannelData]);
+
 
   const chatFormatter = async () => {
     if (messagesArr.length > 0) {
@@ -590,11 +614,11 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                 /> : <View style={styles.avatar}>
                   <AvatarIcon />
                 </View>
-            ) : groupChat?.avatarFileId ? (
+            ) : groupChatInfo?.avatarFileId ? (
               <Image
                 style={styles.avatar}
                 source={{
-                  uri: `https://api.${apiRegion}.amity.co/api/v3/files/${groupChat?.avatarFileId}/download`,
+                  uri: `https://api.${apiRegion}.amity.co/api/v3/files/${groupChatInfo?.avatarFileId}/download`,
                 }}
               />
             ) : (
@@ -606,18 +630,18 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
               <CustomText style={styles.chatName} numberOfLines={1}>
                 {chatReceiver
                   ? chatReceiver?.displayName
-                  : groupChat?.displayName}
+                  : groupChatInfo?.displayName}
               </CustomText>
-              {groupChat && (
+              {groupChatInfo && (
                 <CustomText style={styles.chatMember}>
-                  {groupChat?.memberCount} members
+                  {groupChatInfo?.memberCount} members
                 </CustomText>
               )}
             </View>
           </View>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ChatDetail', { channelId: channelId, channelType: chatReceiver ? 'conversation' : 'community', chatReceiver: chatReceiver ?? undefined, groupChat: groupChat ?? undefined });
+              navigation.navigate('ChatDetail', { channelId: channelId, channelType: chatReceiver ? 'conversation' : 'community', chatReceiver: chatReceiver ?? undefined, groupChat: groupChatInfo ?? undefined });
             }}
           >
             <MenuIcon color={theme.colors.base} />
@@ -653,7 +677,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
 
           />
 
-          {inputMessage.length > 0 ? (
+          {(inputMessage.trim()).length > 0 ? (
             <TouchableOpacity onPress={handleSend} style={styles.sendIcon}>
               <SendChatIcon color={theme.colors.primary} />
             </TouchableOpacity>

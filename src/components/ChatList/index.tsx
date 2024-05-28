@@ -27,7 +27,7 @@ export interface IChatListProps {
 export interface IGroupChatObject {
   displayName: string;
   memberCount: number;
-  users: UserInterface[];
+  users?: UserInterface[];
   avatarFileId: string | undefined;
 }
 const ChatList: React.FC<IChatListProps> = ({

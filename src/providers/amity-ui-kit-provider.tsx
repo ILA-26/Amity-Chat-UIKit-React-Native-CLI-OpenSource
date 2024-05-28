@@ -3,6 +3,8 @@ import * as React from 'react';
 import AuthContextProvider from './auth-provider';
 import { MenuProvider } from 'react-native-popup-menu';
 import { DefaultTheme, type MD3Theme, PaperProvider } from 'react-native-paper';
+import { store } from '../redux/store';
+import { Provider } from 'react-redux';
 export interface IAmityUIkitProvider {
   userId: string;
   displayName: string;
@@ -97,20 +99,22 @@ export default function AmityUiKitProvider({
   };
 
   return (
-    <AuthContextProvider
-      userId={userId}
-      displayName={displayName || userId}
-      apiKey={apiKey}
-      apiRegion={apiRegion}
-      apiEndpoint={apiEndpoint}
-      authToken={authToken}
-    >
-      <PaperProvider theme={darkMode ? defaultDarkTheme : customizedTheme}>
-        <MenuProvider>
-          {children}
-        </MenuProvider>
-      </PaperProvider>
-    </AuthContextProvider >
+    <Provider store={store}>
+      <AuthContextProvider
+        userId={userId}
+        displayName={displayName || userId}
+        apiKey={apiKey}
+        apiRegion={apiRegion}
+        apiEndpoint={apiEndpoint}
+        authToken={authToken}
+      >
+        <PaperProvider theme={darkMode ? defaultDarkTheme : customizedTheme}>
+          <MenuProvider>
+            {children}
+          </MenuProvider>
+        </PaperProvider>
+      </AuthContextProvider >
+    </Provider>
 
   );
 }

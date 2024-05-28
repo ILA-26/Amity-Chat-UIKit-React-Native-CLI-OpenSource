@@ -30,6 +30,9 @@ import { AvatarIcon } from '../../svg/AvatarIcon';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 import BackButton from '../../components/BackButton';
+import recentChatSlice from '../../redux/slices/RecentChatSlice';
+import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface EditChatDetailProps {
   navigation: any;
@@ -55,10 +58,16 @@ export const EditChatRoomDetail: React.FC<EditChatDetailProps> = ({
   const [uploadedFileId, setUploadedFileId] = useState<string>()
 
   const theme = useTheme() as MyMD3Theme;
-
-
+  const { channelList } = useSelector((state: RootState) => state.recentChat);
+  const { updateByChannelId } = recentChatSlice.actions
+  const dispatch = useDispatch();
+  
   const onDonePressed = async () => {
 
+    const currentChannel = channelList.find(item => item.chatId === channelId)
+    currentChannel.avatarFileId = uploadedFileId
+    dispatch(updateByChannelId({channelId: channelId, updatedChannelData: currentChannel}))
+    
     try {
 
       setShowLoadingIndicator(true);
@@ -127,11 +136,6 @@ export const EditChatRoomDetail: React.FC<EditChatDetailProps> = ({
         }
       );
     } else {
-      // Alert.alert('Select a Photo', '', [
-      //   { text: 'Cancel', style: 'cancel' },
-      //   { text: 'Take Photo', onPress: pickCamera },
-      //   { text: 'Choose from Library', onPress: pickImage },
-      // ]);
       pickImage()
 
     }

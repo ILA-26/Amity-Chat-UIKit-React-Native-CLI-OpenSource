@@ -23,11 +23,19 @@ import { createAmityChannel } from '../../providers/channel-provider';
 import { AddChatIcon } from '../../svg/AddChat';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
+import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import recentChatSlice from '../../redux/slices/RecentChatSlice';
 
 export default function RecentChat() {
   const { client, isConnected } = useAuth();
+  const { channelList } = useSelector((state: RootState) => state.recentChat);
+
+  const { updateRecentChat, clearChannelList } = recentChatSlice.actions
+  const dispatch = useDispatch();
+
+
   const theme = useTheme() as MyMD3Theme;
-  const [channelObjects, setChannelObjects] = useState<IChatListProps[]>([]);
   const [loadChannel, setLoadChannel] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState(false)
   const styles = useStyles()
@@ -35,6 +43,7 @@ export default function RecentChat() {
   const flatListRef = useRef(null);
 
   const [channelData, setChannelData] = useState<Amity.LiveCollection<Amity.Channel>>();
+
 
 
   const {
@@ -97,7 +106,6 @@ export default function RecentChat() {
   useEffect(() => {
     onQueryChannel();
     return () => {
-      console.log(disposers)
       disposers.forEach(fn => fn());
     };
   }, [isConnected]);
@@ -129,7 +137,8 @@ export default function RecentChat() {
           };
         }
       );
-      setChannelObjects([...formattedChannelObjects]);
+      dispatch(clearChannelList())
+      dispatch(updateRecentChat([...formattedChannelObjects]))
       setLoadChannel(false);
     }
   }, [channelData]);
@@ -201,17 +210,19 @@ export default function RecentChat() {
     ) : (
       <View style={styles.chatListContainer}>
         <FlatList
-          data={channelObjects}
+          data={channelList}
           renderItem={({ item }) => renderChatList(item)}
-          keyExtractor={(item) => item.chatId.toString()}
+          keyExtractor={(item) => item.chatId.toString() +item?.avatarFileId}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.4}
           ref={flatListRef}
+          extraData={channelList}
         />
 
       </View>
     );
-  }, [loadChannel, channelObjects, handleLoadMore]);
+  }, [loadChannel, channelList, handleLoadMore]);
+  
   const renderChatList = (item: IChatListProps): ReactElement => {
     return (
       <ChatList
