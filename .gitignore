@@ -8,6 +8,8 @@
 # VSCode
 .vscode/
 jsconfig.json
+google-services.json
+GoogleService-Info.plist
 
 # Xcode
 #
@@ -28,6 +30,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+
 
 # Android/IJ
 #
