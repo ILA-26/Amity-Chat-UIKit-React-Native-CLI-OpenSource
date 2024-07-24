@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import { useTheme } from "react-native-paper";
-import type { MyMD3Theme } from "../../providers/amity-ui-kit-provider";
+import { useTheme } from 'react-native-paper';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -12,7 +12,6 @@ export const useStyles = () => {
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
-
     },
     textChatBubble: {
       alignSelf: 'flex-start',
@@ -32,9 +31,9 @@ export const useStyles = () => {
     },
     userBubble: {
       alignSelf: 'flex-end',
-      backgroundColor:  theme.colors.chatBubbles?.userBubble,
+      backgroundColor: theme.colors.chatBubbles?.userBubble,
       maxWidth: '100%',
-      marginLeft: 60
+      marginLeft: 60,
     },
     userMessageDelete: {
       alignSelf: 'flex-end',
@@ -52,7 +51,7 @@ export const useStyles = () => {
       alignSelf: 'flex-start',
       backgroundColor: theme.colors.chatBubbles?.friendBubble,
       maxWidth: '100%',
-      marginRight: 60
+      marginRight: 60,
     },
     chatUserText: {
       fontSize: 16,
@@ -60,15 +59,15 @@ export const useStyles = () => {
     },
     chatFriendText: {
       fontSize: 16,
-      color:  theme.colors.chatMessageTexts?.friendMessageText,
+      color: theme.colors.chatMessageTexts?.friendMessageText,
     },
     deletedMessage: {
       color: '#898E9E',
-      marginLeft: 5
+      marginLeft: 5,
     },
     deletedMessageRow: {
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     chatTimestamp: {
       fontSize: 13,
@@ -78,7 +77,7 @@ export const useStyles = () => {
     AllInputWrap: {
       backgroundColor: theme.colors.background,
       borderTopWidth: 1,
-      borderTopColor: theme.colors.border
+      borderTopColor: theme.colors.border,
     },
     InputWrap: {
       backgroundColor: theme.colors.background,
@@ -137,7 +136,7 @@ export const useStyles = () => {
       fontWeight: '600',
       width: 'auto',
       maxWidth: 200,
-      color: theme.colors.base
+      color: theme.colors.base,
     },
     icon: {
       backgroundColor: '#D9E5FC',
@@ -152,12 +151,12 @@ export const useStyles = () => {
     },
     chatMember: {
       marginTop: 2,
-      color: theme.colors.baseShade1
+      color: theme.colors.baseShade1,
     },
     chatIcon: {
       width: 24,
       height: 20,
-      marginLeft: 8
+      marginLeft: 8,
     },
     settingIcon: {
       width: 26,
@@ -167,7 +166,7 @@ export const useStyles = () => {
     chatTitleWrap: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginLeft: 4
+      marginLeft: 4,
     },
     sendIcon: {
       marginRight: 6,
@@ -190,7 +189,7 @@ export const useStyles = () => {
       backgroundColor: theme.colors.background,
     },
     iconText: {
-      color: theme.colors.base
+      color: theme.colors.base,
     },
     imageMessage: {
       resizeMode: 'cover',
@@ -222,7 +221,7 @@ export const useStyles = () => {
     },
     loadingImage: {
       flexDirection: 'row',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
     },
     bubbleDivider: {
       borderBottomColor: theme.colors.border,
@@ -238,7 +237,7 @@ export const useStyles = () => {
       marginBottom: 6,
     },
     dateText: {
-      color: theme.colors.base
+      color: theme.colors.base,
     },
     optionsContainer: {
       backgroundColor: 'white', // Change the background color
@@ -247,10 +246,10 @@ export const useStyles = () => {
       width: 80, // Set the width of the options container
       marginTop: -50, // Adjust the top margin as needed
     },
-
+    optionText: {
+      color: theme.colors.base,
+    },
   });
 
   return styles;
-}
-
-
+};
