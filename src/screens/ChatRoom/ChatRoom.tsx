@@ -457,7 +457,6 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                   ) : (
                     <MenuOption
                       onSelect={() => {
-                        console.log('Report message', message._id);
                         reportMessage(message._id);
                       }}
                     >
