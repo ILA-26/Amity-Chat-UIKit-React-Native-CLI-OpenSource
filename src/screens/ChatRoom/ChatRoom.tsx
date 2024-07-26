@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   View,
   Image,
@@ -17,7 +23,11 @@ import {
 import ImageView from 'react-native-image-viewing';
 import CustomText from '../../components/CustomText';
 import { useStyles } from './styles';
-import { type RouteProp, useNavigation } from '@react-navigation/native';
+import {
+  type RouteProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import type { RootStackParamList } from '../../routes/RouteParamList';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,8 +37,6 @@ import {
   MessageContentType,
   MessageRepository,
   SubChannelRepository,
-  getSubChannelTopic,
-  subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
 import useAuth from '../../hooks/useAuth';
 
@@ -122,15 +130,10 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [visibleFullImage, setIsVisibleFullImage] = useState<boolean>(false);
   const [fullImage, setFullImage] = useState<string>('');
-  const [subChannelData, setSubChannelData] = useState<Amity.SubChannel>();
   const [displayImages, setDisplayImages] = useState<IDisplayImage[]>([]);
   const [editMessageModal, setEditMessageModal] = useState<boolean>(false);
   const [editMessageId, setEditMessageId] = useState<string>('');
   const [editMessageText, setEditMessageText] = useState<string>('');
-  const disposers: Amity.Unsubscriber[] = [];
-
-  const subscribeSubChannel = (subChannel: Amity.SubChannel) =>
-    disposers.push(subscribeTopic(getSubChannelTopic(subChannel)));
 
   useEffect(() => {
     const currentChannel = channelList.find(
@@ -143,17 +146,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     });
   }, [channelList]);
 
-  useEffect(() => {
-    if (channelId) {
-      SubChannelRepository.getSubChannel(channelId, ({ data: subChannel }) => {
-        setSubChannelData(subChannel);
-      });
-    }
-    return () => {
-      disposers.forEach((fn) => fn());
-      stopRead();
-    };
-  }, [channelId]);
+  useFocusEffect(() => {});
 
   const startRead = async () => {
     await SubChannelRepository.startMessageReceiptSync(channelId);
@@ -167,27 +160,33 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     return user;
   };
 
-  useEffect(() => {
-    if (subChannelData && channelId) {
+  useFocusEffect(
+    useCallback(() => {
+      let disposers: Amity.Unsubscriber[] = [];
       startRead();
 
-      const unsubscribe = MessageRepository.getMessages(
-        { subChannelId: channelId, limit: 10, includeDeleted: true },
-        (value) => {
-          const messages = value.data;
+      disposers.push(
+        MessageRepository.getMessages(
+          { subChannelId: channelId, limit: 10, includeDeleted: true },
+          (value) => {
+            const messages = value.data;
 
-          // mark the last message as read
-          if (messages.length > 0) {
-            const lastMessage = messages[0];
-            lastMessage.markRead();
+            // mark the last message as read
+            if (messages.length > 0) {
+              const lastMessage = messages[0];
+              lastMessage.markRead();
+            }
+            setMessagesData(value);
           }
-          setMessagesData(value);
-          subscribeSubChannel(subChannelData as Amity.SubChannel);
-        }
+        )
       );
-      disposers.push(() => unsubscribe);
-    }
-  }, [subChannelData]);
+
+      return () => {
+        disposers.forEach((fn) => fn());
+        stopRead();
+      };
+    }, [channelId])
+  );
 
   const chatFormatter = async () => {
     if (messagesArr.length > 0) {
@@ -264,8 +263,8 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
   };
 
   function handleBack(): void {
-    disposers.forEach((fn) => fn());
-    stopRead();
+    // disposers.forEach((fn) => fn());
+    // stopRead();
   }
 
   const loadNextMessages = () => {
@@ -622,9 +621,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       <SafeAreaView style={styles.topBarContainer} edges={['top']}>
         <View style={styles.topBar}>
           <View style={styles.chatTitleWrap}>
-            <TouchableOpacity onPress={handleBack}>
-              <BackButton onPress={handleBack} />
-            </TouchableOpacity>
+            <BackButton />
 
             {chatReceiver ? (
               chatReceiver?.avatarFileId ? (
