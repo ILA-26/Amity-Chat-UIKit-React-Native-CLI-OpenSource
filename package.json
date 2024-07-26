@@ -85,6 +85,8 @@
     "@types/react": "^18.2.44"
   },
   "peerDependencies": {
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-firebase/messaging": "^20.1.0",
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "*",
     "@react-navigation/stack": "*",
@@ -92,9 +94,7 @@
     "react-native": "*",
     "react-native-safe-area-context": "*",
     "react-native-screens": "*",
-    "react-native-svg": "*",
-    "@react-native-firebase/app": "^20.1.0",
-    "@react-native-firebase/messaging": "^20.1.0"
+    "react-native-svg": "*"
   },
   "workspaces": [
     "example"
@@ -174,7 +174,7 @@
     ]
   },
   "dependencies": {
-    "@amityco/ts-sdk-react-native": "^6.24.1",
+    "@amityco/ts-sdk-react-native": "^6.29.1",
     "@reduxjs/toolkit": "^2.2.5",
     "i18next": "22.4.10",
     "moment": "2.29.4",
