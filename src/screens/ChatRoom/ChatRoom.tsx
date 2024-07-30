@@ -451,13 +451,17 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                           ]
                         )
                       }
-                      text="Delete"
-                    />
+                    >
+                      <Text style={styles.optionText}>Delete</Text>
+                    </MenuOption>
                   ) : (
                     <MenuOption
-                      onSelect={() => reportMessage(message._id)}
-                      text="Report"
-                    />
+                      onSelect={() => {
+                        reportMessage(message._id);
+                      }}
+                    >
+                      <Text style={styles.optionText}>Report</Text>
+                    </MenuOption>
                   )}
                   {message.messageType === 'text' && isUserChat && (
                     <MenuOption
@@ -467,8 +471,9 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                           message.text as string
                         );
                       }}
-                      text="Edit"
-                    />
+                    >
+                      <Text style={styles.optionText}>Edit</Text>
+                    </MenuOption>
                   )}
                 </MenuOptions>
               </Menu>
