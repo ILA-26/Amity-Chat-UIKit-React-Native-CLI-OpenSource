@@ -255,11 +255,31 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       },
     };
 
-    const { data: message } =
-      await MessageRepository.createMessage(textMessage);
-    if (message) {
-      setInputMessage('');
-      scrollToBottom();
+    try {
+      const { data: message } =
+        await MessageRepository.createMessage(textMessage);
+      if (message) {
+        setInputMessage('');
+        scrollToBottom();
+      }
+    } catch (e) {
+      const errorMessage = e.message;
+      let notificationMessage = "Your message wasn't sent. Please try again.";
+
+      if (errorMessage === 'Amity SDK (400308): Text contain blocked word') {
+        notificationMessage =
+          "Your message wasn't sent as it contains a blocked word.";
+      } else if (
+        errorMessage ===
+        'Amity SDK (400309): Data contain link that is not in whitelist'
+      ) {
+        notificationMessage =
+          'Your message wasn’t sent as it contained a link that’s not allowed.';
+      } else if (errorMessage === 'Amity SDK (400302): User is muted') {
+        notificationMessage = 'User is muted';
+      }
+
+      Alert.alert(notificationMessage);
     }
   };
 
