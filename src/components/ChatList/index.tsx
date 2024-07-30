@@ -41,17 +41,19 @@ const ChatList: React.FC<IChatListProps> = ({
 }: IChatListProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { client, apiRegion } = useAuth();
-  const [oneOnOneChatObject, setOneOnOneChatObject] = useState<Amity.Membership<'channel'>[]>();
-  const [groupChatObject, setGroupChatObject] = useState<Amity.Membership<'channel'>[]>();
-  const [channelAvatarFileId, setChannelAvatarFileId] = useState<string | undefined>(avatarFileId)
-  const [channelDisplayName, setChannelDisplayName] = useState<string>(chatName)
+  const [oneOnOneChatObject, setOneOnOneChatObject] =
+    useState<Amity.Membership<'channel'>[]>();
+  const [groupChatObject, setGroupChatObject] =
+    useState<Amity.Membership<'channel'>[]>();
+  const [channelAvatarFileId, setChannelAvatarFileId] = useState<
+    string | undefined
+  >(avatarFileId);
+  const [channelDisplayName, setChannelDisplayName] =
+    useState<string>(chatName);
 
   const styles = useStyles();
 
-
-  const handlePress = (
-    chatMemberNumber: number
-  ) => {
+  const handlePress = (chatMemberNumber: number) => {
     if (oneOnOneChatObject) {
       const targetIndex: number = oneOnOneChatObject?.findIndex(
         (item) => item.userId !== (client as Amity.Client).userId
@@ -68,7 +70,6 @@ const ChatList: React.FC<IChatListProps> = ({
           chatReceiver: chatReceiver,
         });
       }
-
     }
     if (groupChatObject) {
       const userArr: UserInterface[] = groupChatObject?.map((item) => {
@@ -90,7 +91,6 @@ const ChatList: React.FC<IChatListProps> = ({
         groupChat: groupChat,
       });
     }
-
   };
   useEffect(() => {
     ChannelRepository.Membership.getMembers(
@@ -101,43 +101,49 @@ const ChatList: React.FC<IChatListProps> = ({
         } else if (members) {
           setGroupChatObject(members);
         }
-      },
+      }
     );
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (!oneOnOneChatObject) setChannelDisplayName(chatName);
+  }, [chatName]);
 
   useEffect(() => {
     if (oneOnOneChatObject) {
       const targetIndex: number = oneOnOneChatObject?.findIndex(
         (item) => item.userId !== (client as Amity.Client).userId
       );
-      setChannelAvatarFileId(oneOnOneChatObject[targetIndex]?.user?.avatarFileId ?? avatarFileId)
-      setChannelDisplayName(oneOnOneChatObject[targetIndex]?.user?.displayName as string)
-    }
-  }, [oneOnOneChatObject])
 
+      setChannelAvatarFileId(
+        oneOnOneChatObject[targetIndex]?.user?.avatarFileId ?? avatarFileId
+      );
+      setChannelDisplayName(
+        oneOnOneChatObject[targetIndex]?.user?.displayName as string
+      );
+    }
+  }, [oneOnOneChatObject]);
 
   return (
-
-    <TouchableHighlight
-      onPress={() => handlePress(chatMemberNumber)}
-    >
+    <TouchableHighlight onPress={() => handlePress(chatMemberNumber)}>
       <View style={styles.chatCard}>
         <View style={styles.avatarSection}>
-
-
-          {channelAvatarFileId ? <Image
-            style={styles.icon}
-            source={
-              {
+          {channelAvatarFileId ? (
+            <Image
+              style={styles.icon}
+              source={{
                 uri: `https://api.${apiRegion}.amity.co/api/v3/files/${channelAvatarFileId}/download?size=small`,
-              }
-            }
-          /> : <View style={styles.icon}>
-            {channelType === 'community' ? <CommunityChatIcon />
-              : <PrivateChatIcon />}
-
-          </View>}
-
+              }}
+            />
+          ) : (
+            <View style={styles.icon}>
+              {channelType === 'community' ? (
+                <CommunityChatIcon />
+              ) : (
+                <PrivateChatIcon />
+              )}
+            </View>
+          )}
         </View>
 
         <View style={styles.chatDetailSection}>
