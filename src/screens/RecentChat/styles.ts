@@ -38,7 +38,7 @@ export const useStyles = () => {
     titleText: {
       fontSize: 20,
       fontWeight: '700',
-      color: theme.colors.base
+      color: theme.colors.base,
     },
     tabView: {
       backgroundColor: theme.colors.background,
@@ -70,11 +70,18 @@ export const useStyles = () => {
       flex: 1,
       backgroundColor: theme.colors.background,
     },
-    chatListContainer:{
+    chatListContainer: {
       paddingBottom: Platform.OS === 'ios' ? 65 : 35,
-    }
+    },
+    chatListEmptyState: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    chatListEmptyText: {
+      color: theme.colors.baseShade3,
+      fontSize: 17,
+    },
   });
   return styles;
-}
-
-
+};

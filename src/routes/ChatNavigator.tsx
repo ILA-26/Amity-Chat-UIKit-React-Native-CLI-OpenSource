@@ -16,30 +16,26 @@ import MemberDetail from '../screens/MemberDetail/MemberDetail';
 import ChatRoom from '../screens/ChatRoom/ChatRoom';
 import useAuth from '../hooks/useAuth';
 
-
 export default function ChatNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
-  const { isConnected } = useAuth();
+
   return (
     <NavigationContainer independent={true}>
-      {isConnected && <Stack.Navigator
+      <Stack.Navigator
         screenOptions={{
           headerShadowVisible: false,
           contentStyle: {
             backgroundColor: 'white',
           },
-
-          // headerShown: false,
         }}
       >
-
         <Stack.Screen
           name="RecentChat"
           component={RecentChat}
-          options={({ }) => ({
+          options={({}) => ({
             title: '',
-          })} />
-
+          })}
+        />
         <Stack.Screen
           name="ChatRoom"
           options={{ headerShown: false }}
@@ -49,16 +45,15 @@ export default function ChatNavigator() {
           name="ChatDetail"
           component={ChatRoomSetting}
           options={{
-            headerShown: false
+            headerShown: false,
           }}
-
         />
         <Stack.Screen
           name="MemberDetail"
           component={MemberDetail}
           options={{
             title: 'Member Detail',
-            headerShown: false
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -66,23 +61,20 @@ export default function ChatNavigator() {
           component={EditChatRoomDetail}
           options={{
             title: 'Edit Chat Detail',
-            headerShown: false
+            headerShown: false,
           }}
         />
-
         <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen
             name="SelectMembers"
             component={SelectMembers}
-            options={({ }) => ({
+            options={({}) => ({
               title: '',
-              headerShown: false
-
+              headerShown: false,
             })}
           />
         </Stack.Group>
-      </Stack.Navigator>}
-
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
