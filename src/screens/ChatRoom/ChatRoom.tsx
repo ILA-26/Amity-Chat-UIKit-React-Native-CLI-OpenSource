@@ -260,11 +260,6 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     }
   };
 
-  function handleBack(): void {
-    // disposers.forEach((fn) => fn());
-    // stopRead();
-  }
-
   const loadNextMessages = () => {
     if (flatListRef.current && hasNextPage && onNextPage) {
       onNextPage();
