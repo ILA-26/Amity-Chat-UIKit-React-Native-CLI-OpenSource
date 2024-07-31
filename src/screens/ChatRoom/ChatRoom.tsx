@@ -146,8 +146,6 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     });
   }, [channelList]);
 
-  useFocusEffect(() => {});
-
   const startRead = async () => {
     await SubChannelRepository.startMessageReceiptSync(channelId);
   };
