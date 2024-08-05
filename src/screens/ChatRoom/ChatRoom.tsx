@@ -166,15 +166,22 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       disposers.push(
         MessageRepository.getMessages(
           { subChannelId: channelId, limit: 10, includeDeleted: true },
-          (value) => {
-            const messages = value.data;
+          ({ data: messages, loading, error }) => {
+            if (!loading && messages) {
+              // filter syned message since UIKIT did not support unsync message yet
+              const syncedMessages = messages.filter(
+                (message) =>
+                  !message.syncState || message.syncState === 'synced'
+              );
 
-            // mark the last message as read
-            if (messages.length > 0) {
-              const lastMessage = messages[0];
-              lastMessage.markRead();
+              // mark the last message as read
+              if (syncedMessages.length > 0) {
+                const lastMessage = messages[0];
+                lastMessage.markRead();
+              }
+
+              setMessagesData({ data: syncedMessages, loading, error });
             }
-            setMessagesData(value);
           }
         )
       );
