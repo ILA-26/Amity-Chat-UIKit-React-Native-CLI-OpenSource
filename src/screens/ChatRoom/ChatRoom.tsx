@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   View,
   Image,
@@ -17,7 +23,11 @@ import {
 import ImageView from 'react-native-image-viewing';
 import CustomText from '../../components/CustomText';
 import { useStyles } from './styles';
-import { type RouteProp, useNavigation } from '@react-navigation/native';
+import {
+  type RouteProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native';
 import type { RootStackParamList } from '../../routes/RouteParamList';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,8 +37,6 @@ import {
   MessageContentType,
   MessageRepository,
   SubChannelRepository,
-  getSubChannelTopic,
-  subscribeTopic,
 } from '@amityco/ts-sdk-react-native';
 import useAuth from '../../hooks/useAuth';
 
@@ -122,15 +130,10 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [visibleFullImage, setIsVisibleFullImage] = useState<boolean>(false);
   const [fullImage, setFullImage] = useState<string>('');
-  const [subChannelData, setSubChannelData] = useState<Amity.SubChannel>();
   const [displayImages, setDisplayImages] = useState<IDisplayImage[]>([]);
   const [editMessageModal, setEditMessageModal] = useState<boolean>(false);
   const [editMessageId, setEditMessageId] = useState<string>('');
   const [editMessageText, setEditMessageText] = useState<string>('');
-  const disposers: Amity.Unsubscriber[] = [];
-
-  const subscribeSubChannel = (subChannel: Amity.SubChannel) =>
-    disposers.push(subscribeTopic(getSubChannelTopic(subChannel)));
 
   useEffect(() => {
     const currentChannel = channelList.find(
@@ -142,18 +145,6 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       memberCount: currentChannel?.chatMemberNumber,
     });
   }, [channelList]);
-
-  useEffect(() => {
-    if (channelId) {
-      SubChannelRepository.getSubChannel(channelId, ({ data: subChannel }) => {
-        setSubChannelData(subChannel);
-      });
-    }
-    return () => {
-      disposers.forEach((fn) => fn());
-      stopRead();
-    };
-  }, [channelId]);
 
   const startRead = async () => {
     await SubChannelRepository.startMessageReceiptSync(channelId);
@@ -167,27 +158,40 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
     return user;
   };
 
-  useEffect(() => {
-    if (subChannelData && channelId) {
+  useFocusEffect(
+    useCallback(() => {
+      let disposers: Amity.Unsubscriber[] = [];
       startRead();
 
-      const unsubscribe = MessageRepository.getMessages(
-        { subChannelId: channelId, limit: 10, includeDeleted: true },
-        (value) => {
-          const messages = value.data;
+      disposers.push(
+        MessageRepository.getMessages(
+          { subChannelId: channelId, limit: 10, includeDeleted: true },
+          ({ data: messages, loading, error }) => {
+            if (!loading && messages) {
+              // filter syned message since UIKIT did not support unsync message yet
+              const syncedMessages = messages.filter(
+                (message) =>
+                  !message.syncState || message.syncState === 'synced'
+              );
 
-          // mark the last message as read
-          if (messages.length > 0) {
-            const lastMessage = messages[0];
-            lastMessage.markRead();
+              // mark the last message as read
+              if (syncedMessages.length > 0) {
+                const lastMessage = messages[0];
+                lastMessage.markRead();
+              }
+
+              setMessagesData({ data: syncedMessages, loading, error });
+            }
           }
-          setMessagesData(value);
-          subscribeSubChannel(subChannelData as Amity.SubChannel);
-        }
+        )
       );
-      disposers.push(() => unsubscribe);
-    }
-  }, [subChannelData]);
+
+      return () => {
+        disposers.forEach((fn) => fn());
+        stopRead();
+      };
+    }, [channelId])
+  );
 
   const chatFormatter = async () => {
     if (messagesArr.length > 0) {
@@ -255,18 +259,33 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       },
     };
 
-    const { data: message } =
-      await MessageRepository.createMessage(textMessage);
-    if (message) {
-      setInputMessage('');
-      scrollToBottom();
+    try {
+      const { data: message } =
+        await MessageRepository.createMessage(textMessage);
+      if (message) {
+        setInputMessage('');
+        scrollToBottom();
+      }
+    } catch (e) {
+      const errorMessage = e.message;
+      let notificationMessage = "Your message wasn't sent. Please try again.";
+
+      if (errorMessage === 'Amity SDK (400308): Text contain blocked word') {
+        notificationMessage =
+          "Your message wasn't sent as it contains a blocked word.";
+      } else if (
+        errorMessage ===
+        'Amity SDK (400309): Data contain link that is not in whitelist'
+      ) {
+        notificationMessage =
+          'Your message wasn’t sent as it contained a link that’s not allowed.';
+      } else if (errorMessage === 'Amity SDK (400302): User is muted') {
+        notificationMessage = 'User is muted';
+      }
+
+      Alert.alert(notificationMessage);
     }
   };
-
-  function handleBack(): void {
-    disposers.forEach((fn) => fn());
-    stopRead();
-  }
 
   const loadNextMessages = () => {
     if (flatListRef.current && hasNextPage && onNextPage) {
@@ -451,13 +470,17 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                           ]
                         )
                       }
-                      text="Delete"
-                    />
+                    >
+                      <Text style={styles.optionText}>Delete</Text>
+                    </MenuOption>
                   ) : (
                     <MenuOption
-                      onSelect={() => reportMessage(message._id)}
-                      text="Report"
-                    />
+                      onSelect={() => {
+                        reportMessage(message._id);
+                      }}
+                    >
+                      <Text style={styles.optionText}>Report</Text>
+                    </MenuOption>
                   )}
                   {message.messageType === 'text' && isUserChat && (
                     <MenuOption
@@ -467,8 +490,9 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                           message.text as string
                         );
                       }}
-                      text="Edit"
-                    />
+                    >
+                      <Text style={styles.optionText}>Edit</Text>
+                    </MenuOption>
                   )}
                 </MenuOptions>
               </Menu>
@@ -622,9 +646,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       <SafeAreaView style={styles.topBarContainer} edges={['top']}>
         <View style={styles.topBar}>
           <View style={styles.chatTitleWrap}>
-            <TouchableOpacity onPress={handleBack}>
-              <BackButton onPress={handleBack} />
-            </TouchableOpacity>
+            <BackButton />
 
             {chatReceiver ? (
               chatReceiver?.avatarFileId ? (

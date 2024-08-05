@@ -29,7 +29,7 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
   fcmToken,
 }: IAmityUIkitProvider) => {
   const [error, setError] = useState('');
-  const [isConnecting, setLoading] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [sessionState, setSessionState] = useState('');
 
@@ -52,6 +52,7 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
   const startSync = () => {
     Client.enableUnreadCount();
   };
+
   useEffect(() => {
     if (sessionState === 'established') {
       startSync();
@@ -77,9 +78,11 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
       userId: userId,
       displayName: displayName, // optional
     };
+
     if ((authToken as string)?.length > 0) {
       loginParam = { ...loginParam, authToken: authToken };
     }
+
     const response = await Client.login(loginParam, sessionHandler);
     if (!response) return;
 
@@ -109,24 +112,21 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
 
   const login = async () => {
     setError('');
-    setLoading(true);
+    setIsConnecting(true);
     try {
-      handleConnect();
+      await handleConnect();
     } catch (e) {
       const errorText =
         (e as Error)?.message ?? 'Error while handling request!';
-
       setError(errorText);
       throw error;
     } finally {
-      setLoading(false);
+      setIsConnecting(false);
     }
   };
   useEffect(() => {
     login();
   }, [userId]);
-
-  // TODO
 
   const logout = async () => {
     try {
