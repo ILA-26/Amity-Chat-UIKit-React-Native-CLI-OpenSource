@@ -9,7 +9,7 @@ import ChatList, {
 } from '../../components/ChatList/index';
 import useAuth from '../../hooks/useAuth';
 import { useEffect, useState } from 'react';
-import moment, { locale } from 'moment';
+import moment from 'moment';
 
 import { useStyles } from './styles';
 import CustomText from '../../components/CustomText';
