@@ -1,5 +1,5 @@
 {
-  "name": "@ila26/react-native-cli-chat-ui-kit",
+  "name": "@ila-26/react-native-cli-chat-ui-kit",
   "version": "0.4.0",
   "description": "Chat UIKit",
   "main": "lib/commonjs/index",
