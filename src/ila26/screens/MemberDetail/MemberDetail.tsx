@@ -140,51 +140,49 @@ export default function MemberDetail({ route, navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, height: '100%' }} edges={['top']}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleGoBack} style={styles.closeButton}>
-            <BackIcon color={theme.colors.base} />
-          </TouchableOpacity>
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.headerText}>Member Detail</Text>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleGoBack} style={styles.closeButton}>
+          <BackIcon color={theme.colors.base} />
+        </TouchableOpacity>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.headerText}>Member Detail</Text>
         </View>
-        <CustomTab
-          tabName={['Members', 'Moderators']}
-          onTabChange={handleTabChange}
-        />
-        <View style={styles.inputWrap}>
-          <TouchableOpacity onPress={() => queryAccounts(searchTerm)}>
-            <SearchIcon color={theme.colors.base} />
-          </TouchableOpacity>
-          <TextInput
-            style={styles.input}
-            value={searchTerm}
-            onChangeText={handleChange}
-          />
-          <TouchableOpacity onPress={clearButton}>
-            <CircleCloseIcon color={theme.colors.base} />
-          </TouchableOpacity>
-        </View>
-
-        <FlatList
-          data={sectionedUserList}
-          renderItem={renderItem}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
-          keyExtractor={(item) => item.userId}
-        />
-        <MemberActionModal
-          isVisible={actionModalVisible}
-          setIsVisible={setActionModalVisible}
-          userId={selectedUser?.userId as string}
-          channelId={channelID}
-          hasModeratorPermission={permission}
-          isInModeratorTab={tabIndex === 2}
-          isChannelModerator={isSelectedUserModerator}
-        />
       </View>
-    </SafeAreaView>
+      <CustomTab
+        tabName={['Members', 'Moderators']}
+        onTabChange={handleTabChange}
+      />
+      <View style={styles.inputWrap}>
+        <TouchableOpacity onPress={() => queryAccounts(searchTerm)}>
+          <SearchIcon color={theme.colors.base} />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          value={searchTerm}
+          onChangeText={handleChange}
+        />
+        <TouchableOpacity onPress={clearButton}>
+          <CircleCloseIcon color={theme.colors.base} />
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={sectionedUserList}
+        renderItem={renderItem}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        keyExtractor={(item) => item.userId}
+      />
+      <MemberActionModal
+        isVisible={actionModalVisible}
+        setIsVisible={setActionModalVisible}
+        userId={selectedUser?.userId as string}
+        channelId={channelID}
+        hasModeratorPermission={permission}
+        isInModeratorTab={tabIndex === 2}
+        isChannelModerator={isSelectedUserModerator}
+      />
+    </View>
   );
 }
