@@ -20,24 +20,24 @@ import {
   Alert,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
-import CustomText from '../../components/CustomText';
+import CustomText from '../../../components/CustomText';
 import { useStyles } from './styles';
 import {
   type RouteProp,
   useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
-import type { RootStackParamList } from '../../routes/RouteParamList';
+import type { RootStackParamList } from '../../../routes/RouteParamList';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import BackButton from '../../components/BackButton';
+import BackButton from '../../../components/BackButton';
 import moment from 'moment';
 import {
   MessageContentType,
   MessageRepository,
   SubChannelRepository,
 } from '@amityco/ts-sdk-react-native';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 
 import ImagePicker, {
   launchImageLibrary,
@@ -45,7 +45,7 @@ import ImagePicker, {
   launchCamera,
 } from 'react-native-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LoadingImage from '../../components/LoadingImage';
+import LoadingImage from '../../../components/LoadingImage';
 import {
   Menu,
   MenuOptions,
@@ -53,20 +53,20 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import { SvgXml } from 'react-native-svg';
-import { deletedIcon } from '../../svg/svg-xml-list';
-import EditMessageModal from '../../components/EditMessageModal';
-import { GroupChatIcon } from '../../svg/GroupChatIcon';
-import { AvatarIcon } from '../../svg/AvatarIcon';
-import { CameraBoldIcon } from '../../svg/CameraBoldIcon';
-import { MenuIcon } from '../../svg/MenuIcon';
-import { PlusIcon } from '../../svg/PlusIcon';
-import { SendChatIcon } from '../../svg/SendChatIcon';
-import { AlbumIcon } from '../../svg/AlbumIcon';
+import { deletedIcon } from '../../../svg/svg-xml-list';
+import EditMessageModal from '../../../components/EditMessageModal';
+import { GroupChatIcon } from '../../../svg/GroupChatIcon';
+import { AvatarIcon } from '../../../svg/AvatarIcon';
+import { CameraBoldIcon } from '../../../svg/CameraBoldIcon';
+import { MenuIcon } from '../../../svg/MenuIcon';
+import { PlusIcon } from '../../../svg/PlusIcon';
+import { SendChatIcon } from '../../../svg/SendChatIcon';
+import { AlbumIcon } from '../../../svg/AlbumIcon';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { getAmityUser } from '../../providers/user-provider';
+import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
+import { getAmityUser } from '../../../providers/user-provider';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState } from '../../../redux/store';
 import { IGroupChatObject } from '~/components/ChatList';
 
 type ChatRoomScreenComponentType = React.FC<{

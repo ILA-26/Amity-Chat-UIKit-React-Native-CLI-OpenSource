@@ -6,26 +6,26 @@ import { ChannelRepository } from '@amityco/ts-sdk-react-native';
 import ChatList, {
   type IChatListProps,
   type IGroupChatObject,
-} from '../../components/ChatList/index';
-import useAuth from '../../hooks/useAuth';
+} from '../../../components/ChatList/index';
+import useAuth from '../../../hooks/useAuth';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 
 import { useStyles } from './styles';
-import CustomText from '../../components/CustomText';
+import CustomText from '../../../components/CustomText';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import LoadingIndicator from '../../components/LoadingIndicator/index';
+import LoadingIndicator from '../../../components/LoadingIndicator/index';
 import AddMembersModal from '../../components/AddMembersModal';
-import type { UserInterface } from '../../types/user.interface';
-import { createAmityChannel } from '../../providers/channel-provider';
-import { AddChatIcon } from '../../svg/AddChat';
-import { ChatEmptyIcon } from '../../svg/ChatEmptyIcon';
+import type { UserInterface } from '../../../types/user.interface';
+import { createAmityChannel } from '../../../providers/channel-provider';
+import { AddChatIcon } from '../../../svg/AddChat';
+import { ChatEmptyIcon } from '../../../svg/ChatEmptyIcon';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { RootState } from '../../redux/store';
+import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
+import { RootState } from '../../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import recentChatSlice from '../../redux/slices/RecentChatSlice';
+import recentChatSlice from '../../../redux/slices/RecentChatSlice';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RecentChat() {

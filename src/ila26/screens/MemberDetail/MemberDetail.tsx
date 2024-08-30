@@ -10,18 +10,18 @@ import {
 } from 'react-native';
 
 import { useStyles } from './styles';
-import type { UserInterface } from '../../types/user.interface';
-import UserItem from '../../components/UserItem';
+import type { UserInterface } from '../../../types/user.interface';
+import UserItem from '../../../components/UserItem';
 
-import CustomTab from '../../components/CustomTab';
-import { SearchIcon } from '../../svg/SearchIcon';
-import { CircleCloseIcon } from '../../svg/CircleCloseIcon';
-import { BackIcon } from '../../svg/BackIcon';
+import CustomTab from '../../../components/CustomTab';
+import { SearchIcon } from '../../../svg/SearchIcon';
+import { CircleCloseIcon } from '../../../svg/CircleCloseIcon';
+import { BackIcon } from '../../../svg/BackIcon';
 import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import MemberActionModal from '../../components/MemberActionModal/MemberActionModal';
-import useAuth from '../../hooks/useAuth';
-import { useChannelPermission } from '../../hooks/useChannelPermission';
+import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
+import MemberActionModal from '../../../components/MemberActionModal/MemberActionModal';
+import useAuth from '../../../hooks/useAuth';
+import { useChannelPermission } from '../../../hooks/useChannelPermission';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export type SelectUserList = {

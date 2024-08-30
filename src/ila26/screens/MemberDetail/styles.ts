@@ -1,9 +1,8 @@
-import { Platform, StyleSheet } from "react-native";
-import { useTheme } from "react-native-paper";
-import type { MyMD3Theme } from "../../providers/amity-ui-kit-provider";
+import { Platform, StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
 
 export const useStyles = () => {
-
   const theme = useTheme() as MyMD3Theme;
 
   const styles = StyleSheet.create({
@@ -18,7 +17,7 @@ export const useStyles = () => {
       padding: 12,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     closeButton: {
       padding: 3,
@@ -33,7 +32,7 @@ export const useStyles = () => {
       fontWeight: '600',
       fontSize: 17,
       textAlign: 'center',
-      color: theme.colors.base
+      color: theme.colors.base,
     },
     communityText: {
       marginLeft: 12,
@@ -70,7 +69,7 @@ export const useStyles = () => {
       backgroundColor: '#D9E5FC',
     },
     categoryIcon: {
-      alignItems: 'center'
+      alignItems: 'center',
     },
     LoadingIndicator: {
       paddingVertical: 20,
@@ -99,12 +98,12 @@ export const useStyles = () => {
       marginTop: 10,
     },
     doneText: {
-      color: theme.colors.primary
+      color: theme.colors.primary,
     },
     disabledDone: {
-      opacity: 0.5
-    }
+      opacity: 0.5,
+    },
   });
 
   return styles;
-}
+};
