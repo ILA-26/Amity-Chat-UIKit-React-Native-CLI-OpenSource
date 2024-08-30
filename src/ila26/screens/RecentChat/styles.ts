@@ -28,7 +28,7 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       backgroundColor: theme.colors.background,
       paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingTop: 10,
     },
     addChatIcon: {
       width: 24,
@@ -43,22 +43,36 @@ export const useStyles = () => {
     tabView: {
       backgroundColor: theme.colors.background,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderColor: theme.colors.border,
       flexDirection: 'row',
+      alignItems: 'center',
+      paddingLeft: 10,
+      paddingTop: 8,
+      marginTop: 8,
     },
-    tabViewTitle: {
-      // paddingHorizontal:20,
-      paddingVertical: 14,
-      fontWeight: '600',
-      fontSize: 17,
-      color: theme.colors.primary,
-      borderBottomColor: '#1054DE',
+    selectedTabViewTitle: {
+      paddingBottom: 10,
+      fontWeight: '500',
+      fontSize: 16,
+      color: '#704AD1',
       alignSelf: 'flex-start',
     },
-    indicator: {
+    unSelectedTabViewTitle: {
+      paddingBottom: 10,
+      fontWeight: '500',
+      fontSize: 16,
+      color: theme.colors.baseShade1,
+      alignSelf: 'flex-start',
+    },
+    selectedIndicator: {
       borderBottomWidth: 2,
-      borderBottomColor: theme.colors.primary,
-      marginHorizontal: 20,
+      borderBottomColor: '#704AD1',
+      marginHorizontal: 10,
+    },
+    unSelectedIndicator: {
+      borderBottomWidth: 0,
+      borderBottomColor: theme.colors.shadow,
+      marginHorizontal: 10,
     },
     androidWrap: {
       marginTop: 0,

@@ -1,6 +1,12 @@
 import React, { type ReactElement, useMemo, useRef } from 'react';
 
-import { View, FlatList, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  Pressable,
+} from 'react-native';
 
 import { ChannelRepository } from '@amityco/ts-sdk-react-native';
 import ChatList, {
@@ -31,6 +37,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function RecentChat() {
   const { client, isConnected, error: loginError, sessionState } = useAuth();
   const { channelList } = useSelector((state: RootState) => state.recentChat);
+
+  const individualChannelList = channelList?.filter(
+    (item) => item?.chatMemberNumber === 2
+  );
+  const communityChannelList = channelList?.filter(
+    (item) => item?.chatMemberNumber > 2
+  );
 
   const { updateRecentChat, clearChannelList } = recentChatSlice.actions;
   const dispatch = useDispatch();
@@ -188,10 +201,12 @@ export default function RecentChat() {
       }
     }
   };
+  const [selectedTab, setSelectedTab] = useState('individual');
+
   const renderRecentChat = useMemo(() => {
     return loadChannel ? (
       <View style={{ marginTop: 20 }}>
-        <LoadingIndicator />
+        <LoadingIndicator color="#704AD1" />
       </View>
     ) : channelList.length === 0 ? (
       <View style={styles.chatListEmptyState}>
@@ -201,7 +216,11 @@ export default function RecentChat() {
     ) : (
       <View style={styles.chatListContainer}>
         <FlatList
-          data={channelList}
+          data={
+            selectedTab === 'individual'
+              ? individualChannelList
+              : communityChannelList
+          }
           renderItem={({ item }) => renderChatList(item)}
           keyExtractor={(item) => item.chatId.toString() + item?.avatarFileId}
           onEndReached={handleLoadMore}
@@ -211,7 +230,7 @@ export default function RecentChat() {
         />
       </View>
     );
-  }, [loadChannel, channelList, handleLoadMore]);
+  }, [loadChannel, channelList, handleLoadMore, selectedTab]);
 
   const renderChatList = (item: IChatListProps): ReactElement => {
     return (
@@ -227,12 +246,46 @@ export default function RecentChat() {
       />
     );
   };
+
   const renderTabView = (): ReactElement => {
     return (
       <View style={styles.tabView}>
-        <View style={styles.indicator}>
-          <CustomText style={styles.tabViewTitle}>Recent</CustomText>
-        </View>
+        <Pressable
+          onPress={() => setSelectedTab('individual')}
+          style={
+            selectedTab === 'individual'
+              ? styles.selectedIndicator
+              : styles.unSelectedIndicator
+          }
+        >
+          <CustomText
+            style={
+              selectedTab === 'individual'
+                ? styles.selectedTabViewTitle
+                : styles.unSelectedTabViewTitle
+            }
+          >
+            Recent
+          </CustomText>
+        </Pressable>
+        <Pressable
+          onPress={() => setSelectedTab('community')}
+          style={
+            selectedTab === 'community'
+              ? styles.selectedIndicator
+              : styles.unSelectedIndicator
+          }
+        >
+          <CustomText
+            style={
+              selectedTab === 'community'
+                ? styles.selectedTabViewTitle
+                : styles.unSelectedTabViewTitle
+            }
+          >
+            Community
+          </CustomText>
+        </Pressable>
       </View>
     );
   };
@@ -241,7 +294,7 @@ export default function RecentChat() {
     <SafeAreaView style={{ flex: 1, height: '100%' }} edges={['top']}>
       <View style={styles.chatContainer}>
         <View style={styles.topBar}>
-          <CustomText style={styles.titleText}>Chat</CustomText>
+          <CustomText style={styles.titleText}>Chat ila26</CustomText>
           <TouchableOpacity
             onPress={() => {
               setIsModalVisible(true);
