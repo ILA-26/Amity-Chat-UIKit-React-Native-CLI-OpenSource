@@ -244,7 +244,8 @@ const AddMembersModal = ({
           }
           stickyHeaderIndices={[0]}
           ref={flatListRef}
-          onScroll={handleScroll}
+          // onScroll={handleScroll}
+          bounces={false}
         />
       </View>
     </Modal>

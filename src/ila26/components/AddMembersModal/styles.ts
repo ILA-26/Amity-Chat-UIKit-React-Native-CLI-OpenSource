@@ -61,7 +61,7 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       marginVertical: 10,
     },
-    input: { flex: 1, marginHorizontal: 6 },
+    input: { flex: 1, marginHorizontal: 6, height: 32 },
     cancelBtn: {
       marginRight: 16,
     },
