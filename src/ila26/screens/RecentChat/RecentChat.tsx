@@ -39,10 +39,10 @@ export default function RecentChat() {
   const { channelList } = useSelector((state: RootState) => state.recentChat);
 
   const individualChannelList = channelList?.filter(
-    (item) => item?.chatMemberNumber === 2
+    (item) => item?.channelType !== 'community'
   );
   const communityChannelList = channelList?.filter(
-    (item) => item?.chatMemberNumber > 2
+    (item) => item?.channelType === 'community'
   );
 
   const { updateRecentChat, clearChannelList } = recentChatSlice.actions;
@@ -53,32 +53,13 @@ export default function RecentChat() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const styles = useStyles();
 
-  const flatListRef = useRef(null);
-
   const [channelData, setChannelData] =
     useState<Amity.LiveCollection<Amity.Channel>>();
 
   const { data: channels = [], onNextPage, hasNextPage } = channelData ?? {};
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     header: () => (
-  //       <View style={styles.topBar}>
-  //         <CustomText style={styles.titleText}>Chat</CustomText>
-  //         <TouchableOpacity
-  //           onPress={() => {
-  //             setIsModalVisible(true);
-  //           }}
-  //         >
-  //           <AddChatIcon color={theme.colors.base} />
-  //         </TouchableOpacity>
-  //       </View>
-  //     ),
-  //     headerTitle: '',
-  //   });
-  // }, []);
+  const [selectedTab, setSelectedTab] = useState('individual');
 
   useEffect(() => {
     if (sessionState === 'terminated') {
@@ -96,10 +77,9 @@ export default function RecentChat() {
     try {
       if (isConnected) {
         unsubscibe = ChannelRepository.getChannels(
-          { sortBy: 'lastActivity', limit: 15, membership: 'member' },
+          { sortBy: 'lastActivity', limit: 40, membership: 'member' }, // todo fix load more
           (value) => {
             setChannelData(value);
-
             if (!value.loading) {
               setLoadChannel(false);
             }
@@ -115,7 +95,7 @@ export default function RecentChat() {
     };
   }, [isConnected]);
 
-  useEffect(() => {
+  const formatChat = () => {
     const formattedChannelObjects: IChatListProps[] = channels.map(
       (item: Amity.Channel<any>) => {
         const lastActivityDate: string = moment(item.lastActivity).format(
@@ -129,6 +109,21 @@ export default function RecentChat() {
           dateDisplay = moment(item.lastActivity).format('DD/MM/YYYY');
         }
 
+        // console.log(item?.messagePreview?.dataType);
+
+        let lastMessage = '';
+
+        switch (item?.messagePreview?.dataType) {
+          case 'text':
+            lastMessage = item?.messagePreview?.data?.text;
+            break;
+          case 'image':
+            lastMessage = 'image';
+            break;
+          case 'file':
+            lastMessage = 'file';
+            break;
+        }
         return {
           chatId: item.channelId ?? '',
           chatName: item.displayName ?? '',
@@ -137,12 +132,18 @@ export default function RecentChat() {
           messageDate: dateDisplay ?? '',
           channelType: item.type ?? '',
           avatarFileId: item.avatarFileId,
+          lastMessage: lastMessage,
         };
       }
     );
+    return formattedChannelObjects;
+  };
+
+  useEffect(() => {
+    const formattedChannelObjects: IChatListProps[] = formatChat();
     dispatch(clearChannelList());
-    dispatch(updateRecentChat([...formattedChannelObjects]));
-  }, [channelData]);
+    dispatch(updateRecentChat(formattedChannelObjects));
+  }, [channelData?.data?.length]);
 
   const handleLoadMore = () => {
     if (hasNextPage && onNextPage) {
@@ -201,7 +202,6 @@ export default function RecentChat() {
       }
     }
   };
-  const [selectedTab, setSelectedTab] = useState('individual');
 
   const renderRecentChat = useMemo(() => {
     return loadChannel ? (
@@ -223,10 +223,10 @@ export default function RecentChat() {
           }
           renderItem={({ item }) => renderChatList(item)}
           keyExtractor={(item) => item.chatId.toString() + item?.avatarFileId}
-          onEndReached={handleLoadMore}
+          // onEndReached={handleLoadMore}
           onEndReachedThreshold={0.4}
-          ref={flatListRef}
           extraData={channelList}
+          style={{ marginBottom: 56 }}
         />
       </View>
     );
@@ -243,6 +243,7 @@ export default function RecentChat() {
         messageDate={item.messageDate}
         channelType={item.channelType}
         avatarFileId={item.avatarFileId}
+        lastMessage={item?.lastMessage}
       />
     );
   };
