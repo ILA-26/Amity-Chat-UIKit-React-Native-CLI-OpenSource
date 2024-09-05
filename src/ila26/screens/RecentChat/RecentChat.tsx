@@ -73,7 +73,6 @@ export default function RecentChat() {
 
   useEffect(() => {
     let unsubscibe;
-
     try {
       if (isConnected) {
         unsubscibe = ChannelRepository.getChannels(
@@ -89,7 +88,6 @@ export default function RecentChat() {
     } catch (error) {
       console.log('error query channels', error);
     }
-
     return () => {
       unsubscibe?.();
     };
@@ -109,16 +107,21 @@ export default function RecentChat() {
           dateDisplay = moment(item.lastActivity).format('DD/MM/YYYY');
         }
 
-        // console.log(item?.messagePreview?.dataType);
-
         let lastMessage = '';
+
+        const sendByCurrentUser =
+          client?.userId === item?.messagePreview?.user?.userPublicId;
 
         switch (item?.messagePreview?.dataType) {
           case 'text':
-            lastMessage = item?.messagePreview?.data?.text;
+            lastMessage = sendByCurrentUser
+              ? `You: ${item?.messagePreview?.data?.text}`
+              : item?.messagePreview?.data?.text;
             break;
           case 'image':
-            lastMessage = 'image';
+            lastMessage = sendByCurrentUser
+              ? 'You sent a photo'
+              : 'You recived a photo';
             break;
           case 'file':
             lastMessage = 'file';
@@ -140,10 +143,12 @@ export default function RecentChat() {
   };
 
   useEffect(() => {
-    const formattedChannelObjects: IChatListProps[] = formatChat();
-    dispatch(clearChannelList());
-    dispatch(updateRecentChat(formattedChannelObjects));
-  }, [channelData?.data?.length]);
+    if (channels.length > 0) {
+      const formattedChannelObjects: IChatListProps[] = formatChat();
+      dispatch(clearChannelList());
+      dispatch(updateRecentChat(formattedChannelObjects));
+    }
+  }, [channels?.length]);
 
   const handleLoadMore = () => {
     if (hasNextPage && onNextPage) {
@@ -225,7 +230,7 @@ export default function RecentChat() {
           keyExtractor={(item) => item.chatId.toString() + item?.avatarFileId}
           // onEndReached={handleLoadMore}
           onEndReachedThreshold={0.4}
-          extraData={channelList}
+          // extraData={channelList}
           style={{ marginBottom: 56 }}
         />
       </View>
