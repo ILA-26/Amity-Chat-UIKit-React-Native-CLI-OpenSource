@@ -22,6 +22,7 @@ export interface IChatListProps {
   messageDate: string;
   channelType: 'conversation' | 'broadcast' | 'live' | 'community' | '';
   avatarFileId: string | undefined;
+  lastMessage?: string;
 }
 
 export interface IGroupChatObject {
@@ -38,6 +39,7 @@ const ChatList: React.FC<IChatListProps> = ({
   messageDate,
   channelType,
   avatarFileId,
+  lastMessage,
 }: IChatListProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { client, apiRegion } = useAuth();
@@ -148,9 +150,12 @@ const ChatList: React.FC<IChatListProps> = ({
 
         <View style={styles.chatDetailSection}>
           <View style={styles.chatNameWrap}>
-            <CustomText style={styles.chatName} numberOfLines={1}>
-              {channelDisplayName}
-            </CustomText>
+            <View>
+              <CustomText style={styles.chatName} numberOfLines={1}>
+                {channelDisplayName}
+              </CustomText>
+              <CustomText style={styles.lasMessage}>{lastMessage}</CustomText>
+            </View>
             <CustomText style={styles.chatLightText}>
               ({chatMemberNumber})
             </CustomText>

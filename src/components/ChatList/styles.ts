@@ -1,7 +1,6 @@
-
 import { StyleSheet } from 'react-native';
-import { useTheme } from "react-native-paper";
-import type { MyMD3Theme } from "../../providers/amity-ui-kit-provider";
+import { useTheme } from 'react-native-paper';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
 export const useStyles = () => {
   const theme = useTheme() as MyMD3Theme;
@@ -28,9 +27,11 @@ export const useStyles = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingRight: 16,
-  
     },
-  
+    lasMessage: {
+      fontSize: 15,
+      color: theme.colors.baseShade1,
+    },
     avatarSection: {
       flex: 1,
       paddingVertical: 16,
@@ -51,7 +52,7 @@ export const useStyles = () => {
       fontSize: 13,
       marginHorizontal: 4,
       marginVertical: 2,
-      color: theme.colors.baseShade1
+      color: theme.colors.baseShade1,
     },
     unReadBadge: {
       borderRadius: 72,
@@ -80,6 +81,5 @@ export const useStyles = () => {
       marginLeft: 10,
     },
   });
-  return styles
-}
-
+  return styles;
+};
