@@ -1,16 +1,16 @@
-import { Platform, StyleSheet } from "react-native";
-import { useTheme } from "react-native-paper";
-import type { MyMD3Theme } from "../../providers/amity-ui-kit-provider";
+import { Platform, StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
-export const useStyles = () => {
-
+export const useStyle = () => {
   const theme = useTheme() as MyMD3Theme;
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      height: '100%',
       backgroundColor: theme.colors.background,
-      paddingTop: Platform.OS === 'android' ? 35 : 10, // Adjust for Android status bar
+      // paddingTop: Platform.OS === 'android' ? 35 : 10, // Adjust for Android status bar
     },
     header: {
       paddingTop: Platform.OS === 'ios' ? 50 : 20, // Adjust for iOS notch
@@ -18,7 +18,7 @@ export const useStyles = () => {
       padding: 12,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     closeButton: {
       padding: 3,
@@ -33,10 +33,35 @@ export const useStyles = () => {
       fontWeight: '600',
       fontSize: 17,
       textAlign: 'center',
-      color: theme.colors.base
+      color: theme.colors.base,
     },
-
-
+    communityText: {
+      marginLeft: 12,
+      marginBottom: 10,
+      fontSize: 15,
+      fontWeight: '600',
+    },
+    myCommunityText: {
+      color: theme.colors.base,
+      padding: 16,
+      opacity: 0.4,
+      fontSize: 17,
+    },
+    rowContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+    },
+    rowContainerMyTimeLine: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingBottom: 16,
+      paddingTop: 26,
+      paddingHorizontal: 16,
+      borderBottomColor: theme.colors.baseShade4,
+      borderBottomWidth: 1,
+    },
     avatar: {
       width: 40,
       height: 40,
@@ -45,7 +70,7 @@ export const useStyles = () => {
       backgroundColor: '#D9E5FC',
     },
     categoryIcon: {
-      alignItems: 'center'
+      alignItems: 'center',
     },
     LoadingIndicator: {
       paddingVertical: 20,
@@ -57,14 +82,20 @@ export const useStyles = () => {
     },
     inputWrap: {
       marginHorizontal: 16,
-      backgroundColor: theme.colors.secondary,
-      padding: 10,
+      backgroundColor: theme.colors.baseShade4,
+      paddingHorizontal: 10,
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginVertical: 10,
+      alignItems: 'center',
     },
-    input: { flex: 1, marginHorizontal: 6 },
+    input: {
+      flex: 1,
+      marginHorizontal: 6,
+      paddingVertical: 10,
+      color: theme.colors.base,
+    },
     cancelBtn: {
       marginRight: 16,
     },
@@ -73,15 +104,12 @@ export const useStyles = () => {
       marginTop: 10,
     },
     doneText: {
-      color: theme.colors.primary
+      color: theme.colors.primary,
     },
     disabledDone: {
-      opacity: 0.5
+      color: theme.colors.primary,
+      opacity: 0.5,
     },
-    sectionItem: {
-     flex: 1
-    }
-
   });
   return styles;
-}
+};

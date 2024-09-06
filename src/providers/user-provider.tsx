@@ -1,4 +1,7 @@
 import {
+  runQuery,
+  createQuery,
+  createReport,
   UserRepository,
 } from '@amityco/ts-sdk-react-native';
 import type { UserGroup } from '../types/user.interface';
@@ -31,19 +34,30 @@ export function groupUsers(users: Amity.User[]): UserGroup[] {
   return groups;
 }
 
-
-export async function getAmityUser(userId: string): Promise<any> {
+export async function reportUser(userId: string): Promise<boolean> {
   return await new Promise((resolve, reject) => {
-    let userObject: Record<string, any> = {};
-    const unsubscribe = UserRepository.getUser(userId, (value) => {
-      if (value) {
-        userObject = value;
-        resolve({ userObject, unsubscribe });
-      } else {
-        reject((value as Record<string, any>).error);
+    const query = createQuery(createReport, 'user', userId);
+
+    runQuery(query, (options) => {
+      if (options.loading === false) {
+        if (options.data !== undefined) {
+          return resolve(options.data);
+        } else {
+          return reject(new Error('Unable to report user ' + options.error));
+        }
       }
     });
   });
 }
 
-
+export async function getAmityUser(userId: string): Promise<any> {
+  return await new Promise((resolve, reject) => {
+    const unsubscribe = UserRepository.getUser(userId, (userObject) => {
+      if (userObject) {
+        resolve({ userObject, unsubscribe });
+      } else {
+        reject((userObject as Record<string, any>).error);
+      }
+    });
+  });
+}

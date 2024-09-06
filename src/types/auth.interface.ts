@@ -6,7 +6,7 @@ export type AuthContextInterface = {
   login: () => void;
   isConnected: boolean;
   sessionState: string;
-  apiRegion?: string;
+  apiRegion: string;
   authToken?: string;
   fcmToken?: string;
 };

@@ -2,27 +2,24 @@ import { Dimensions, StyleSheet } from 'react-native';
 
 export const createStyles = () => {
   return StyleSheet.create({
-
     container: {
-      marginVertical: 15,
-    },
-    imageContainer: {
+      flex: 1,
       position: 'relative',
+      maxWidth: Dimensions.get('window').height / 4,
+      height: Dimensions.get('window').height / 5,
       margin: 3,
     },
     image: {
+      flex: 1,
+      width: '100%',
+      height: '100%',
       resizeMode: 'cover',
-      maxWidth: 350,
-      maxHeight: 220,
-      width:   Dimensions.get('window').width /2,
-      height: Dimensions.get('window').width /3.25,
-      borderRadius: 10,
+      borderRadius: 5,
     },
     overlay: {
       ...StyleSheet.absoluteFillObject,
       justifyContent: 'center',
       alignItems: 'center',
-      paddingBottom: 6
     },
     progressBar: {
       marginVertical: 10,
@@ -40,13 +37,6 @@ export const createStyles = () => {
       padding: 7,
       backgroundColor: 'rgba(255, 255, 255, 0.4)',
       borderRadius: 72,
-    },
-    loadingRow: {
-      flexDirection: 'row',
-      paddingTop: 4,
-    },
-    loadingText: {
-      marginRight: 10,
     },
   });
 };

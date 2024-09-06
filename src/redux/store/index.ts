@@ -1,11 +1,25 @@
 import { Store, configureStore } from '@reduxjs/toolkit';
 
-import RecentChatSlice from '../slices/RecentChatSlice';
+import globalFeedSlice from '../slices/globalfeedSlice';
+import feedSlice from '../slices/feedSlice';
+import postDetailSlice from '../slices/postDetailSlice';
+import uiSlice from '../slices/uiSlice';
+import externalSlice from '../slices/externalSlice';
 
 export const store: Store = configureStore({
   reducer: {
-    recentChat: RecentChatSlice.reducer,
+    globalFeed: globalFeedSlice.reducer,
+    postDetail: postDetailSlice.reducer,
+    feed: feedSlice.reducer,
+    ui: uiSlice.reducer,
+    external: externalSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['globalFeed'],
+      },
+    }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

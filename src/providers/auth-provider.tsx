@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, type FC } from 'react';
+import React, { useCallback, useEffect, useState, type FC } from 'react';
 import { Client } from '@amityco/ts-sdk-react-native';
 import type { AuthContextInterface } from '../types/auth.interface';
 import { Alert, Platform } from 'react-native';
 import type { IAmityUIkitProvider } from './amity-ui-kit-provider';
+import { setupAmityVideoPlayer } from '@amityco/video-player-react-native';
 
 export const AuthContext = React.createContext<AuthContextInterface>({
   client: {},
@@ -29,10 +30,9 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
   fcmToken,
 }: IAmityUIkitProvider) => {
   const [error, setError] = useState('');
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [isConnecting, setLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [sessionState, setSessionState] = useState('');
-
   const client: Amity.Client = Client.createClient(apiKey, apiRegion, {
     apiEndpoint: { http: apiEndpoint },
   });
@@ -49,13 +49,8 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
     );
   }, []);
 
-  const startSync = () => {
-    Client.enableUnreadCount();
-  };
-
   useEffect(() => {
     if (sessionState === 'established') {
-      startSync();
       setIsConnected(true);
     }
   }, [sessionState]);
@@ -71,20 +66,20 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
     );
   };
 
-  const handleConnect = async () => {
+  const handleConnect = useCallback(async () => {
     let loginParam;
 
     loginParam = {
       userId: userId,
       displayName: displayName, // optional
     };
-
-    if ((authToken as string)?.length > 0) {
+    if (authToken?.length > 0) {
       loginParam = { ...loginParam, authToken: authToken };
     }
-
     const response = await Client.login(loginParam, sessionHandler);
     if (!response) return;
+
+    setupAmityVideoPlayer();
 
     if (fcmToken) {
       try {
@@ -108,26 +103,28 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
         console.log(err);
       }
     }
-  };
+  }, []);
 
   const login = async () => {
     setError('');
-    setIsConnecting(true);
+    setLoading(true);
     try {
-      await handleConnect();
+      handleConnect();
     } catch (e) {
       const errorText =
         (e as Error)?.message ?? 'Error while handling request!';
+
       setError(errorText);
       throw error;
     } finally {
-      setIsConnecting(false);
+      setLoading(false);
     }
   };
   useEffect(() => {
     login();
   }, [userId]);
 
+  // TODO
   const logout = async () => {
     try {
       Client.stopUnreadSync();
@@ -150,7 +147,7 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
         logout,
         isConnected,
         sessionState,
-        apiRegion: (apiRegion as string).toLowerCase(),
+        apiRegion: apiRegion.toLowerCase(),
       }}
     >
       {children}

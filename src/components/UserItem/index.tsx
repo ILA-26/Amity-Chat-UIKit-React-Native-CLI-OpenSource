@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { useStyles } from './styles';
 import RoundCheckbox from '../RoundCheckbox/index';
-import type { UserInterface } from '../../types/user.interface';
+import type { UserInterface } from 'src/types/user.interface';
 import useAuth from '../../hooks/useAuth';
-import { AvatarIcon } from '../../svg/AvatarIcon';
-import { ThreeDotsIcon } from '../../svg/ThreeDotsIcon';
-import { useTheme } from 'react-native-paper';
-import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
 
 export default function UserItem({
   user,
@@ -15,19 +11,17 @@ export default function UserItem({
   showThreeDot,
   onPress,
   onThreeDotTap,
-  isUserAccount
+  hideMenu,
 }: {
   user: UserInterface;
-  isCheckmark?: boolean | undefined;
-  showThreeDot?: boolean | undefined;
+  isCheckmark?: boolean;
+  showThreeDot?: boolean;
   onPress?: (user: UserInterface) => void;
   onThreeDotTap?: (user: UserInterface) => void;
-  isUserAccount?: boolean
+  hideMenu?: boolean;
 }) {
-
-  const theme = useTheme() as MyMD3Theme;
   const styles = useStyles();
-  const { apiRegion } = useAuth()
+  const { apiRegion } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
   const maxLength = 25;
   const handleToggle = () => {
@@ -50,38 +44,55 @@ export default function UserItem({
     return `https://api.${apiRegion}.amity.co/api/v3/files/${fileId}/download?size=medium`;
   };
 
-  return (
-    <TouchableOpacity style={styles.listItem} onPress={handleToggle}>
-      <View style={styles.leftContainer}>
-        {
-          user?.avatarFileId ? (
-            <Image
-              style={styles.avatar}
-              source={{ uri: avatarFileURL(user.avatarFileId) }}
-            />
-          ) : (
-            <View style={styles.avatar}>
-              <AvatarIcon />
-            </View>
-          )
-        }
-        <Text style={styles.itemText}>{displayName()}</Text>
-      </View>
-      {!isUserAccount && !showThreeDot ? (
-        <RoundCheckbox isChecked={isCheckmark ?? false} />
-      ) : (
-        !isUserAccount &&
+  const renderMenu = useCallback(() => {
+    if (hideMenu) return null;
+    if (showThreeDot)
+      return (
         <TouchableOpacity
-          style={styles.threedotsBtn}
+          style={styles.threeDotsContainerStyle}
           onPress={() => {
             if (onThreeDotTap) {
               onThreeDotTap(user);
             }
           }}
         >
-          <ThreeDotsIcon color={theme.colors.base} />
+          <Image
+            source={require('../../../assets/icon/threeDot.png')}
+            style={styles.dotIcon}
+          />
         </TouchableOpacity>
-      )}
+      );
+    return <RoundCheckbox isChecked={isCheckmark ?? false} />;
+  }, [
+    hideMenu,
+    isCheckmark,
+    onThreeDotTap,
+    showThreeDot,
+    styles.dotIcon,
+    styles.threeDotsContainerStyle,
+    user,
+  ]);
+
+  return (
+    <TouchableOpacity
+      style={styles.listItem}
+      disabled={!onPress}
+      onPress={handleToggle}
+    >
+      <View style={styles.leftContainer}>
+        <Image
+          style={styles.avatar}
+          source={
+            user.avatarFileId
+              ? {
+                  uri: user.avatarFileId && avatarFileURL(user.avatarFileId!),
+                }
+              : require('../../../assets/icon/Placeholder.png')
+          }
+        />
+        <Text style={styles.itemText}>{displayName()}</Text>
+      </View>
+      {renderMenu()}
     </TouchableOpacity>
   );
 }
