@@ -1,4 +1,4 @@
-import React, { type ReactElement, useMemo, useRef } from 'react';
+import React, { type ReactElement, useCallback, useMemo, useRef } from 'react';
 
 import {
   View,
@@ -19,7 +19,7 @@ import moment from 'moment';
 
 import { useStyles } from './styles';
 import CustomText from '../../../components/CustomText';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import LoadingIndicator from '../../../components/LoadingIndicator/index';
 import AddMembersModal from '../../components/AddMembersModal';
@@ -71,27 +71,36 @@ export default function RecentChat() {
     }
   }, [sessionState, loginError]);
 
-  useEffect(() => {
-    let unsubscibe;
-    try {
-      if (isConnected) {
-        unsubscibe = ChannelRepository.getChannels(
-          { sortBy: 'lastActivity', limit: 40, membership: 'member' }, // todo fix load more
-          (value) => {
-            setChannelData(value);
-            if (!value.loading) {
-              setLoadChannel(false);
-            }
+  useFocusEffect(
+    useCallback(() => {
+      let unsubscribe;
+
+      const fetchChannels = async () => {
+        try {
+          if (isConnected) {
+            unsubscribe = ChannelRepository.getChannels(
+              { sortBy: 'lastActivity', limit: 40, membership: 'member' },
+              (value) => {
+                setChannelData(value);
+                if (!value.loading) {
+                  setLoadChannel(false);
+                }
+              }
+            );
           }
-        );
-      }
-    } catch (error) {
-      console.log('error query channels', error);
-    }
-    return () => {
-      unsubscibe?.();
-    };
-  }, [isConnected]);
+        } catch (error) {
+          console.log('Error fetching channels:', error);
+        }
+      };
+
+      fetchChannels();
+
+      // Cleanup on screen unfocus or component unmount
+      return () => {
+        unsubscribe?.();
+      };
+    }, [isConnected, channelList]) // Re-fetch when screen is focused or `isConnected` changes
+  );
 
   const formatChat = () => {
     const formattedChannelObjects: IChatListProps[] = channels.map(
@@ -148,7 +157,7 @@ export default function RecentChat() {
       dispatch(clearChannelList());
       dispatch(updateRecentChat(formattedChannelObjects));
     }
-  }, [channels?.length]);
+  }, [channels]);
 
   const handleLoadMore = () => {
     if (hasNextPage && onNextPage) {
@@ -229,9 +238,9 @@ export default function RecentChat() {
           renderItem={({ item }) => renderChatList(item)}
           keyExtractor={(item) => item.chatId.toString() + item?.avatarFileId}
           // onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.4}
+          // onEndReachedThreshold={0.4}
           // extraData={channelList}
-          style={{ marginBottom: 56 }}
+          style={{ paddingBottom: 56 }}
         />
       </View>
     );
