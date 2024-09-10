@@ -28,10 +28,7 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       paddingRight: 16,
     },
-    lasMessage: {
-      fontSize: 15,
-      color: theme.colors.baseShade1,
-    },
+
     avatarSection: {
       flex: 1,
       paddingVertical: 16,
@@ -72,6 +69,10 @@ export const useStyles = () => {
     chatTimeWrap: {
       flexDirection: 'column',
       alignItems: 'flex-end',
+    },
+    lasMessage: {
+      fontSize: 15,
+      color: theme.colors.baseShade1,
     },
     avatar: {
       width: 40,

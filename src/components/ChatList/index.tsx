@@ -23,6 +23,7 @@ export interface IChatListProps {
   channelType: 'conversation' | 'broadcast' | 'live' | 'community' | '';
   avatarFileId: string | undefined;
   lastMessage?: string;
+  onpress?: any;
 }
 
 export interface IGroupChatObject {
@@ -40,6 +41,7 @@ const ChatList: React.FC<IChatListProps> = ({
   channelType,
   avatarFileId,
   lastMessage,
+  onpress,
 }: IChatListProps) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { client, apiRegion } = useAuth();
@@ -56,6 +58,7 @@ const ChatList: React.FC<IChatListProps> = ({
   const styles = useStyles();
 
   const handlePress = (chatMemberNumber: number) => {
+    onpress();
     if (oneOnOneChatObject) {
       const targetIndex: number = oneOnOneChatObject?.findIndex(
         (item) => item.userId !== (client as Amity.Client).userId

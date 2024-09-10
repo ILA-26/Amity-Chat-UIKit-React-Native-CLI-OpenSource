@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
 
@@ -85,7 +85,7 @@ export const useStyles = () => {
       backgroundColor: theme.colors.background,
     },
     chatListContainer: {
-      paddingBottom: Platform.OS === 'ios' ? 65 : 35,
+      // paddingBottom: Platform.OS === 'ios' ? 65 : 35,
     },
     chatListEmptyState: {
       flex: 1,

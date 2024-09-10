@@ -71,6 +71,9 @@ export default function RecentChat() {
     }
   }, [sessionState, loginError]);
 
+  const counter = useRef(0);
+  const limit = 2;
+
   useFocusEffect(
     useCallback(() => {
       let unsubscribe;
@@ -93,14 +96,24 @@ export default function RecentChat() {
         }
       };
 
-      fetchChannels();
+      if (counter.current < limit) {
+        fetchChannels();
+        counter.current = counter.current + 1;
+      }
 
       // Cleanup on screen unfocus or component unmount
       return () => {
         unsubscribe?.();
+        // counter.current = 0;
       };
     }, [isConnected, channelList]) // Re-fetch when screen is focused or `isConnected` changes
   );
+
+  useEffect(() => {
+    return () => {
+      console.log('reseting');
+    };
+  }, []);
 
   const formatChat = () => {
     const formattedChannelObjects: IChatListProps[] = channels.map(
@@ -258,6 +271,11 @@ export default function RecentChat() {
         channelType={item.channelType}
         avatarFileId={item.avatarFileId}
         lastMessage={item?.lastMessage}
+        onpress={() => {
+          console.log('retest', counter.current);
+
+          counter.current = 0;
+        }}
       />
     );
   };
