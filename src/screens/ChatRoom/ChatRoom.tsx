@@ -395,7 +395,13 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                 </View>
               </View>
             ) : (
-              <Menu>
+              <Menu
+                style={[
+                  isUserChat
+                    ? styles.currentUserMessage
+                    : styles.friendUserMessage,
+                ]}
+              >
                 <MenuTrigger
                   onAlternativeAction={() =>
                     openFullImage(message.image as string, message.messageType)
@@ -445,12 +451,10 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
                   customStyles={{
                     optionsContainer: {
                       ...styles.optionsContainer,
-                      marginLeft: isUserChat
-                        ? 240 +
-                          (message.text && message.text.length < 5
-                            ? message.text.length * 10
-                            : 10)
-                        : 0,
+                      marginTop:
+                        isUserChat && message.messageType === 'text'
+                          ? -75
+                          : -50,
                     },
                   }}
                 >
