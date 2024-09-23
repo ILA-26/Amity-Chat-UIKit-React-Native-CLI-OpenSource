@@ -29,11 +29,15 @@ export const useStyles = () => {
       marginVertical: 5,
       borderRadius: 10,
     },
-    userBubble: {
+    currentUserMessage: {
       alignSelf: 'flex-end',
+    },
+    friendUserMessage: {
+      alignSelf: 'flex-start',
+    },
+    userBubble: {
       backgroundColor: theme.colors.chatBubbles?.userBubble,
       maxWidth: '100%',
-      marginLeft: 60,
     },
     userMessageDelete: {
       alignSelf: 'flex-end',
