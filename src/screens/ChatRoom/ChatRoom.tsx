@@ -204,9 +204,8 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
               _id: item.messageId,
               text: '',
               image:
-                `https://api.${apiRegion}.amity.co/api/v3/files/${
-                  (item?.data as Record<string, any>).fileId
-                }/download` ?? undefined,
+                `https://api.${apiRegion}.amity.co/api/v3/files/${(item?.data as Record<string, any>).fileId
+                }/download`,
               createdAt: item.createdAt as string,
               editedAt: item.editedAt as string,
               user: {
