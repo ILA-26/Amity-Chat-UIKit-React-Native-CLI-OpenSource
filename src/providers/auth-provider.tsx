@@ -35,6 +35,7 @@ export const AuthContextProvider: FC<IAmityUIkitProvider> = ({
 
   const client: Amity.Client = Client.createClient(apiKey, apiRegion, {
     apiEndpoint: { http: apiEndpoint },
+    prefixDeviceIdKey: 'chat',
   });
 
   const sessionHandler: Amity.SessionHandler = {

@@ -118,7 +118,7 @@ __metadata:
     ts-jest: ^28.0.3
   peerDependencies:
     react-native: ^0.70.13
-  checksum: 78f038f43530c4a32e98f4a299d37d987e71f8aaf3cf474b3db8cc484f6bd464ef97aef0abd7da35c63033c5fb5191f749c0eafff159524c4049dcce658df10a
+  checksum: 78f038f43530c4a32e98f4a299d37d987e71f8aaf3cf474b3db8cc484f6bd464ef97aef0abd7da35c63033c5fb5191f749c0eafff159524c4049dcce658df10
   languageName: node
   linkType: hard
 
