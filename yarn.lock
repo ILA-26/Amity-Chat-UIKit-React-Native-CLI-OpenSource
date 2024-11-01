@@ -43,7 +43,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@amityco/react-native-cli-chat-ui-kit@workspace:."
   dependencies:
-    "@amityco/ts-sdk-react-native": 6.30.2
+    "@amityco/ts-sdk-react-native": ^6.30.2
     "@commitlint/config-conventional": ^17.0.2
     "@evilmartians/lefthook": ^1.5.0
     "@react-native-async-storage/async-storage": ^1.22.3
@@ -98,9 +98,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@amityco/ts-sdk-react-native@npm:6.30.2":
-  version: 6.30.2
-  resolution: "@amityco/ts-sdk-react-native@npm:6.30.2"
+"@amityco/ts-sdk-react-native@npm:^6.30.2":
+  version: 6.32.0
+  resolution: "@amityco/ts-sdk-react-native@npm:6.32.0"
   dependencies:
     "@react-native-async-storage/async-storage": ^1.17.7
     "@react-native-community/netinfo": ^9.4.1
@@ -118,7 +118,7 @@ __metadata:
     ts-jest: ^28.0.3
   peerDependencies:
     react-native: ^0.70.13
-  checksum: 7f44348ff745d143e3426c3441868ccb3fa57a4137e34d6135edf33c2398ddfc8e848243ff76825511cc989e25e9321cbf9972bf135f1814b1c8c3fcbe648453
+  checksum: 78f038f43530c4a32e98f4a299d37d987e71f8aaf3cf474b3db8cc484f6bd464ef97aef0abd7da35c63033c5fb5191f749c0eafff159524c4049dcce658df10a
   languageName: node
   linkType: hard
 
