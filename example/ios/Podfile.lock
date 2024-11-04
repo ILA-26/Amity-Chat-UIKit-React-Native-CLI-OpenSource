@@ -1,5 +1,5 @@
 PODS:
-  - amityco-react-native-cli-chat-ui-kit (0.4.0):
+  - amityco-react-native-cli-chat-ui-kit (0.6.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1342,7 +1342,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  amityco-react-native-cli-chat-ui-kit: 6bd071a5b4d3ce60d66a85781e5bbba3013bdb1d
+  amityco-react-native-cli-chat-ui-kit: caab6213fea51382fb07d87f1f467cdf07ae4f9b
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: f64d1e2ea739b4d8f7e4740cde18089cd97fe864
