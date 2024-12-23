@@ -72,7 +72,6 @@ export default function RecentChat() {
   }, [sessionState, loginError]);
 
   const counter = useRef(0);
-  const limit = 2;
 
   useFocusEffect(
     useCallback(() => {
@@ -96,10 +95,7 @@ export default function RecentChat() {
         }
       };
 
-      if (counter.current < limit) {
-        fetchChannels();
-        counter.current = counter.current + 1;
-      }
+      fetchChannels();
 
       // Cleanup on screen unfocus or component unmount
       return () => {

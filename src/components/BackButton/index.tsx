@@ -18,6 +18,7 @@ export default function BackButton({ onPress }: IBackBtn) {
         navigation.goBack();
         onPress && onPress();
       }}
+      style={{ padding: 12 }}
     >
       <BackIcon color={theme.colors.base} />
     </TouchableOpacity>
