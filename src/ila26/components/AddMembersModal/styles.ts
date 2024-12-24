@@ -22,6 +22,7 @@ export const useStyles = () => {
       padding: 3,
     },
     headerTextContainer: {
+      paddingTop : Platform.OS === "ios" ? 12 : 0,
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',

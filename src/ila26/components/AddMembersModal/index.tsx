@@ -54,9 +54,12 @@ const AddMembersModal = ({
   const { data: userArr = [], onNextPage } = usersObject ?? {};
 
   const queryAccounts = (text: string = '') => {
-    UserRepository.getUsers({ displayName: text, limit: 20 }, (data) => {
-      setUsersObject(data);
-    });
+    UserRepository.getUsers(
+      { displayName: text, limit: 100, sortBy: 'displayName' },
+      (data) => {
+        setUsersObject(data);
+      }
+    );
   };
   const handleChange = (text: string) => {
     setSearchTerm(text);
@@ -72,7 +75,10 @@ const AddMembersModal = ({
   };
 
   const createSectionGroup = () => {
-    const sectionUserArr = userArr.map((item) => {
+    const filtredarray = userArr.filter(
+      (item) => item.userId !== item.displayName
+    );
+    const sectionUserArr = filtredarray.map((item) => {
       return {
         userId: item.userId,
         displayName: item.displayName as string,
@@ -111,6 +117,10 @@ const AddMembersModal = ({
   const renderItem = ({ item, index }: ListRenderItemInfo<UserInterface>) => {
     let isrenderheader = true;
     const isAlphabet = /^[A-Z]$/i.test(item.displayName[0] as string);
+
+    // if(item.displayName.includes("-")){
+    //   return null;
+    // }
     const currentLetter = isAlphabet
       ? (item.displayName as string).charAt(0).toUpperCase()
       : '#';
@@ -244,7 +254,7 @@ const AddMembersModal = ({
           }
           stickyHeaderIndices={[0]}
           ref={flatListRef}
-          // onScroll={handleScroll}
+          onScroll={handleScroll}
           bounces={false}
         />
       </View>
