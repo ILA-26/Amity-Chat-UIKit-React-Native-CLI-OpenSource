@@ -11,7 +11,7 @@ export const useStyles = () => {
       backgroundColor: theme.colors.background,
     },
     header: {
-      paddingTop: Platform.OS === 'ios' ? 50 : 20, // Adjust for iOS notch
+      marginTop: Platform.OS === 'ios' ? 50 : 20, // Adjust for iOS notch
       zIndex: 1,
       padding: 12,
       flexDirection: 'row',
@@ -22,7 +22,7 @@ export const useStyles = () => {
       padding: 3,
     },
     headerTextContainer: {
-      paddingTop : Platform.OS === "ios" ? 12 : 0,
+      // paddingTop : Platform.OS === "ios" ? 12 : 0,
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
@@ -60,6 +60,7 @@ export const useStyles = () => {
       borderRadius: 4,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      alignItems: 'center',
       marginVertical: 10,
     },
     input: { flex: 1, marginHorizontal: 6, height: 32 },
