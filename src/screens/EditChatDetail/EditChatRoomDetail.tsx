@@ -24,7 +24,6 @@ import LoadingImage from '../../components/LoadingImage';
 import type { RootStackParamList } from '../../routes/RouteParamList';
 import { type RouteProp, useRoute } from '@react-navigation/native';
 import useAuth from '../../hooks/useAuth';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraIcon } from '../../svg/CameraIcon';
 import { AvatarIcon } from '../../svg/AvatarIcon';
 import { useTheme } from 'react-native-paper';
@@ -154,7 +153,7 @@ export const EditChatRoomDetail: React.FC<EditChatDetailProps> = ({
   }
   return (
     <View style={{flex:1}}>
-      <SafeAreaView style={styles.topBarContainer} edges={['top']}>
+      <View style={styles.topBarContainer} >
         <View style={styles.topBar}>
           <BackButton />
           <View style={styles.headerTextContainer}>
@@ -162,7 +161,7 @@ export const EditChatRoomDetail: React.FC<EditChatDetailProps> = ({
           </View>
           <DoneButton navigation={navigation} onDonePressed={onDonePressed} />
         </View>
-      </SafeAreaView>
+      </View>
 
       <View style={styles.container}>
 
