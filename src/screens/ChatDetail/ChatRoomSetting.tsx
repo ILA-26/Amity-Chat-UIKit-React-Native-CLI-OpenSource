@@ -10,7 +10,6 @@ import { GroupMembersIcon } from '../../svg/GroupMembersIcon';
 import { BackIcon } from '../../svg/BackIcon';
 import { useTheme } from 'react-native-paper';
 import type { MyMD3Theme } from '../../providers/amity-ui-kit-provider';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ChatDetailProps {
   navigation: any;
@@ -130,7 +129,7 @@ export const ChatRoomSetting: React.FC<ChatDetailProps> = ({
   const data = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack} style={styles.closeButton}>
           <BackIcon color={theme.colors.base} />
@@ -169,6 +168,6 @@ export const ChatRoomSetting: React.FC<ChatDetailProps> = ({
         onConfirmPressed={() => setShowReportAlert(false)}
         onDismiss={() => setShowReportAlert(false)}
       />
-    </SafeAreaView>
+    </View>
   );
 };

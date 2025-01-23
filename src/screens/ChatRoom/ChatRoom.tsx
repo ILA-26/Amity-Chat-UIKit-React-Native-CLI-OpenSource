@@ -643,7 +643,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.topBarContainer} edges={['top']}>
+      <View style={styles.topBarContainer}>
         <View style={styles.topBar}>
           <View style={styles.chatTitleWrap}>
             <BackButton />
@@ -699,7 +699,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
             <MenuIcon color={theme.colors.base} />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
       <View style={styles.chatContainer}>
         <FlatList
           data={sortedMessages}

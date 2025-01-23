@@ -22,7 +22,6 @@ import type { MyMD3Theme } from '../../../providers/amity-ui-kit-provider';
 import MemberActionModal from '../../../components/MemberActionModal/MemberActionModal';
 import useAuth from '../../../hooks/useAuth';
 import { useChannelPermission } from '../../../hooks/useChannelPermission';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export type SelectUserList = {
   title: string;
