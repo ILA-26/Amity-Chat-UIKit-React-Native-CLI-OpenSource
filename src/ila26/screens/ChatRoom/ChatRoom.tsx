@@ -715,7 +715,7 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
         behavior={'padding'}
         style={styles.AllInputWrap}
         enabled
-        keyboardVerticalOffset={0}
+        keyboardVerticalOffset={120}
       >
         <View style={styles.InputWrap}>
           <TextInput

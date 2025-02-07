@@ -32,6 +32,11 @@ export interface IGroupChatObject {
   users?: UserInterface[];
   avatarFileId: string | undefined;
 }
+
+const truncateString = (str: string, limit: number): string => {
+  if (!str) return '';
+  return str.length > limit ? str.substring(0, limit) + '...' : str;
+};
 const ChatList: React.FC<IChatListProps> = ({
   chatId,
   chatName,
@@ -157,7 +162,9 @@ const ChatList: React.FC<IChatListProps> = ({
               <CustomText style={styles.chatName} numberOfLines={1}>
                 {channelDisplayName}
               </CustomText>
-              <CustomText style={styles.lasMessage}>{lastMessage}</CustomText>
+              <CustomText style={styles.lasMessage}>
+                {truncateString(lastMessage, 25)}
+              </CustomText>
             </View>
             <CustomText style={styles.chatLightText}>
               ({chatMemberNumber})
@@ -165,13 +172,13 @@ const ChatList: React.FC<IChatListProps> = ({
           </View>
           <View style={styles.chatTimeWrap}>
             <CustomText style={styles.chatLightText}>{messageDate}</CustomText>
-            {unReadMessage > 0 && (
+            {/* {unReadMessage > 0 && (
               <View style={styles.unReadBadge}>
                 <CustomText style={styles.unReadText}>
                   {unReadMessage}
                 </CustomText>
               </View>
-            )}
+            )} */}
           </View>
         </View>
       </View>
