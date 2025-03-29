@@ -18,6 +18,7 @@ import {
   FlatList,
   Keyboard,
   Alert,
+  Platform,
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import CustomText from '../../../components/CustomText';
@@ -712,10 +713,9 @@ const ChatRoom: ChatRoomScreenComponentType = ({ route }) => {
       </View>
 
       <KeyboardAvoidingView
-        behavior={'padding'}
         style={styles.AllInputWrap}
-        enabled
-        keyboardVerticalOffset={120}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.select({ ios: 110, android: 110 })}
       >
         <View style={styles.InputWrap}>
           <TextInput

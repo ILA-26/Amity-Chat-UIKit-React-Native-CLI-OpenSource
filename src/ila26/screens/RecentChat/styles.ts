@@ -28,7 +28,6 @@ export const useStyles = () => {
       justifyContent: 'space-between',
       backgroundColor: theme.colors.background,
       paddingHorizontal: 20,
-      paddingTop: 10,
     },
     addChatIcon: {
       width: 24,
@@ -83,6 +82,7 @@ export const useStyles = () => {
     chatContainer: {
       flex: 1,
       backgroundColor: theme.colors.background,
+      paddingTop: 20,
     },
     chatListContainer: {
       // paddingBottom: Platform.OS === 'ios' ? 65 : 35,

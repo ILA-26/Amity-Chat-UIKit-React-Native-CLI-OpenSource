@@ -45,10 +45,6 @@ export default function RecentChat() {
     (item) => item?.channelType === 'community'
   );
 
-  const truncateString = (str: string, limit: number): string => {
-    if (!str) return '';
-    return str.length > limit ? str.substring(0, limit) + '...' : str;
-  };
   const { updateRecentChat, clearChannelList } = recentChatSlice.actions;
   const dispatch = useDispatch();
 
@@ -253,7 +249,7 @@ export default function RecentChat() {
           // onEndReached={handleLoadMore}
           // onEndReachedThreshold={0.4}
           // extraData={channelList}
-          style={{ paddingBottom: 56 }}
+          contentContainerStyle={{ paddingBottom: 100 }}
         />
       </View>
     );
@@ -272,6 +268,8 @@ export default function RecentChat() {
         avatarFileId={item.avatarFileId}
         lastMessage={item?.lastMessage}
         onpress={() => {
+          console.log('retest', counter.current);
+
           counter.current = 0;
         }}
       />
@@ -322,24 +320,31 @@ export default function RecentChat() {
   };
 
   return (
-    <View style={styles.chatContainer}>
-      <View style={styles.topBar}>
-        <CustomText style={styles.titleText}>Chat ila26</CustomText>
-        <TouchableOpacity
-          onPress={() => {
-            setIsModalVisible(true);
-          }}
-        >
-          <AddChatIcon color={theme.colors.base} />
-        </TouchableOpacity>
+    <View
+      style={{
+        flex: 1,
+        height: '100%',
+      }}
+    >
+      <View style={styles.chatContainer}>
+        <View style={styles.topBar}>
+          <CustomText style={styles.titleText}>Chat ila26</CustomText>
+          <TouchableOpacity
+            onPress={() => {
+              setIsModalVisible(true);
+            }}
+          >
+            <AddChatIcon color={theme.colors.base} />
+          </TouchableOpacity>
+        </View>
+        {renderTabView()}
+        {renderRecentChat}
+        <AddMembersModal
+          onFinish={handleOnFinish}
+          onClose={handleCloseModal}
+          visible={isModalVisible}
+        />
       </View>
-      {renderTabView()}
-      {renderRecentChat}
-      <AddMembersModal
-        onFinish={handleOnFinish}
-        onClose={handleCloseModal}
-        visible={isModalVisible}
-      />
     </View>
   );
 }
